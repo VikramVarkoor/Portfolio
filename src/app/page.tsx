@@ -261,7 +261,7 @@ export default function Home() {
               complex systems work elegantly.
             </p>
             <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.75 }}>
-              Based in Dubai. Immediately available. Open to engineering, AI/ML, and data roles.
+              Based in Dubai. Immediately available. Available for engineering and AI roles across hardware and software.
             </p>
             <div style={{ marginTop: 28 }}>
               {experience.map((e, i) => (

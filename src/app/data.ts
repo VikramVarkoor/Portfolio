@@ -125,3 +125,20 @@ export const skills = [
   { category: 'Hardware', items: ['FPGA (Zynq-7020, Vitis HLS, Vivado)', 'Arduino', 'Raspberry Pi', 'ESP32', 'MQTT', 'ZigBee', 'PCB Design (EasyEDA)'] },
   { category: 'DevOps', items: ['Git', 'GitHub', 'Vercel', 'Docker (basic)', 'GitHub Actions'] },
 ]
+
+export const experience = [
+  {
+    title: 'Hardware R&D Intern',
+    company: 'Syncrow IoT',
+    location: 'Dubai, UAE',
+    duration: 'May 2025 – Sep 2025',
+    hours: '~422 hours',
+    bullets: [
+      'Conducted structured hardware validation and functional testing of 15+ IoT devices including smart door locks, smart ACs, energy clamps, radar sensors, and multi-mode gateways',
+      'Designed a standardized 17-step IoT device testing procedure covering power-up, protocol handshake, latency, edge case handling, and stress testing',
+      'Worked with embedded communication protocols including MQTT, ZigBee, and wired/wireless IoT architectures',
+      'Built a structured device catalogue documenting technical specifications, measurement accuracy, and reliability ratings for 30+ devices',
+      'Authored validation requirements documentation working cross-functionally with the product owner and data scientist',
+    ],
+  },
+]

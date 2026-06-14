@@ -271,11 +271,14 @@ export default function Home() {
                     <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{e.period}</span>
                   </div>
                   <p style={{ fontSize: 13, color: '#f6ad55', marginBottom: 10 }}>{e.company} · {e.hours}</p>
-                  <ul style={{ paddingLeft: 16 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {e.bullets.map((b, j) => (
-                      <li key={j} style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 4 }}>{b}</li>
+                      <div key={j} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                        <span style={{ color: '#f6ad55', fontSize: 10, marginTop: 3, flexShrink: 0 }}>✦</span>
+                        <span style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.7 }}>{b}</span>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               ))}
             </div>

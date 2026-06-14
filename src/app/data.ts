@@ -20,6 +20,16 @@ export const projects = [
     video: '/lumen-demo.mp4',
   },
   {
+    title: 'PaperChat',
+    description:
+      'RAG-powered document chatbot — upload a PDF and chat with it in real time. Built a custom embedding pipeline using fastembed (ONNX) + NumPy cosine similarity to run the full RAG stack under 80MB RAM on a free-tier backend, down from ~500MB with PyTorch. Streams answers token by token with source citations.',
+    tags: ['Next.js', 'FastAPI', 'Python', 'fastembed', 'Groq API', 'RAG', 'Vercel'],
+    accent: 'teal',
+    github: 'https://github.com/VikramVarkoor/PaperChat',
+    live: 'https://paper-chat-five.vercel.app',
+    video: '/paperchat-demo.mp4',
+  },
+  {
     title: 'AI Audit Risk Analyzer',
     description:
       '4-agent sequential pipeline using CrewAI where each agent passes structured output as context to the next. Governance agent performs hallucination detection and PII compliance checks.',
@@ -109,23 +119,9 @@ export const publications = [
 ]
 
 export const skills = [
-  { category: 'AI & ML', items: ['Python', 'CrewAI', 'LangChain', 'Gemini API', 'Groq', 'OpenAI', 'TensorFlow/Keras', 'XGBoost', 'Prompt Engineering'] },
+  { category: 'AI & ML', items: ['Python', 'CrewAI', 'LangChain', 'Gemini API', 'Groq', 'OpenAI', 'TensorFlow/Keras', 'XGBoost', 'Prompt Engineering', 'RAG', 'fastembed', 'ONNX Runtime'] },
   { category: 'Data', items: ['SQL (CTEs, Window Functions)', 'pandas', 'NumPy', 'Tableau', 'ETL Pipelines', 'SQLite', 'matplotlib/seaborn'] },
-  { category: 'Full Stack', items: ['Next.js', 'TypeScript', 'React', 'Supabase', 'PostgreSQL', 'REST APIs', 'SSE', 'Vercel', 'Streamlit'] },
+  { category: 'Full Stack', items: ['Next.js', 'TypeScript', 'React', 'Supabase', 'PostgreSQL', 'REST APIs', 'SSE', 'Vercel', 'FastAPI', 'Render', 'Streamlit'] },
   { category: 'Hardware', items: ['FPGA (Zynq-7020, Vitis HLS, Vivado)', 'Arduino', 'Raspberry Pi', 'ESP32', 'MQTT', 'ZigBee', 'PCB Design (EasyEDA)'] },
   { category: 'DevOps', items: ['Git', 'GitHub', 'Vercel', 'Docker (basic)', 'GitHub Actions'] },
-]
-
-export const experience = [
-  {
-    role: 'Engineering Intern',
-    company: 'Syncrow IoT',
-    period: 'May – Sep 2025',
-    hours: '~422 hrs',
-    bullets: [
-      'Designed a standardized 17-step device testing procedure across 15+ IoT product lines.',
-      'Authored formal validation and requirements documentation collaborating cross-functionally with product owners and data scientists.',
-      'Built a structured 30+ device catalogue and performed regression testing via an internal issue tracker.',
-    ],
-  },
 ]

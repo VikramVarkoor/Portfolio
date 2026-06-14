@@ -128,11 +128,10 @@ export const skills = [
 
 export const experience = [
   {
-    title: 'Hardware R&D Intern',
+    role: 'Hardware R&D Intern',
     company: 'Syncrow IoT',
-    location: 'Dubai, UAE',
-    duration: 'May 2025 – Sep 2025',
-    hours: '~422 hours',
+    period: 'May 2025 – Sep 2025',
+    hours: '~422 hrs',
     bullets: [
       'Conducted structured hardware validation and functional testing of 15+ IoT devices including smart door locks, smart ACs, energy clamps, radar sensors, and multi-mode gateways',
       'Designed a standardized 17-step IoT device testing procedure covering power-up, protocol handshake, latency, edge case handling, and stress testing',

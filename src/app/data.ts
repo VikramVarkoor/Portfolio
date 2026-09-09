@@ -30,6 +30,24 @@ export const projects = [
     video: '/paperchat-demo.mp4',
   },
   {
+    title: 'Deriv Trading Agent',
+    description:
+      'Production-deployed autonomous AI trading dashboard for EUR/USD paper trading. Full modern frontend toolchain — Redux Toolkit state management, a 61-test Jest/RTL suite, one component built strictly test-first via TDD, and a 9-assertion Cypress E2E suite, backed by a custom Webpack config (SVGR, path aliases, bundle analyzer). Statistical validation layer in Python caught and fixed a real data leakage bug, landing on an honest 52.51% accuracy vs a 46.59% naive baseline.',
+    tags: ['TypeScript', 'Next.js', 'Redux Toolkit', 'Jest/RTL', 'Cypress', 'Python', 'scikit-learn'],
+    accent: 'blue',
+    github: 'https://github.com/VikramVarkoor/Deriv-Trading-Agent',
+    live: 'https://deriv-agent.vercel.app',
+  },
+  {
+    title: 'Pitch Angle Finder',
+    description:
+      'AI app that generates realistic PR pitch angles from a plain-English company description. The system prompt evaluates five explicit newsworthiness factors — timeliness, human interest, data/surprise, industry relevance, and conflict. Diagnosed and fixed a live production issue caused by a deprecated LLM model returning 404s, and built a genuine retry mechanism for LLM output reliability, backed by an automated test and verified against production.',
+    tags: ['Python', 'FastAPI', 'Pydantic', 'Next.js', 'TypeScript', 'Groq API', 'pytest'],
+    accent: 'purple',
+    github: 'https://github.com/VikramVarkoor/pitch-angle-finder',
+    live: 'https://pitch-angle-finder.vercel.app',
+  },
+  {
     title: 'AI Audit Risk Analyzer',
     description:
       '4-agent sequential pipeline using CrewAI where each agent passes structured output as context to the next. Governance agent performs hallucination detection and PII compliance checks.',
@@ -93,10 +111,10 @@ export const projects = [
     live: null,
   },
   {
-    title: 'Smart Meter Analytics',
+    title: 'Smart Meter Analytics at Scale',
     description:
-      'Real-time IoT analytics pipeline simulating 21,840 rows of power consumption data across 5 devices. 4-panel dashboard with load trends, anomaly distribution, weekly patterns, and cost breakdowns.',
-    tags: ['Python', 'MQTT', 'pandas', 'Matplotlib', 'Streamlit'],
+      'Distributed data pipeline benchmarking PySpark against pandas at scale. Built a synthetic IoT power dataset generator producing 10.5M readings across 300 devices, partitioned into Parquet files by year/month for partition pruning. Implemented a 4-query Spark SQL analytics layer (peak-window detection, anomaly tracking, cost aggregation) and benchmarked it honestly against a single-node pandas baseline from 100k to 5M rows, including cases where Spark lost due to shuffle overhead.',
+    tags: ['PySpark', 'Spark SQL', 'pandas', 'Parquet', 'NumPy'],
     accent: 'teal',
     github: 'https://github.com/VikramVarkoor/Smart-meter-analytics',
     live: null,

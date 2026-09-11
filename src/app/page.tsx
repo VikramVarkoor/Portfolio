@@ -8,7 +8,6 @@ import Reveal from './components/Reveal'
 import { useWipe } from './components/WipeProvider'
 import { trackProjectOpen, trackCvDownload, trackModeSwitch } from './lib/analytics'
 import {
-  projects,
   projectMap,
   SPOTLIGHT_IDS,
   ARCHIVE_GROUPS,
@@ -19,16 +18,6 @@ import {
 } from './data'
 
 const LAST_UPDATED = 'September 2026'
-
-const PUBLISHED_COUNT = publicationsRows.filter(r => r.statusClass === 'pub').length
-const UNDER_REVIEW_COUNT = publicationsRows.length - PUBLISHED_COUNT
-
-const STATS = [
-  { n: String(projects.length), label: 'Projects shipped' },
-  { n: String(PUBLISHED_COUNT), label: `IEEE papers published${UNDER_REVIEW_COUNT ? ` (${UNDER_REVIEW_COUNT} under review)` : ''}` },
-  { n: '422', label: 'Hours of hardware R&D at Syncrow IoT' },
-  { n: '15+', label: 'IoT device types validated' },
-]
 
 export default function Home() {
   const { wipeNavigate } = useWipe()
@@ -85,14 +74,6 @@ export default function Home() {
         </div>
         <div className="status-line">
           <span className="status-dot" /> Currently: MSc AI @ Heriot-Watt Dubai, starting Sept 2026 · Open to full-time roles
-        </div>
-        <div className="stat-strip">
-          {STATS.map(s => (
-            <div className="stat" key={s.label}>
-              <span className="stat-n">{s.n}</span>
-              <span className="stat-l">{s.label}</span>
-            </div>
-          ))}
         </div>
       </section>
 

@@ -62,7 +62,6 @@ export default function SoftwarePage() {
           {SOFTWARE_LENS_IDS.map((id, idx) => {
             const p = projectMap[id]
             const stack = p.tags.slice(0, 3)
-            const bullets = p.swBullets || []
             const isLast = idx === SOFTWARE_LENS_IDS.length - 1
             return (
               <span key={id}>
@@ -77,13 +76,9 @@ export default function SoftwarePage() {
                   ))}
                   <span className="punc">],</span>
                 </CodeLine>
-                <CodeLine n={nextLine()}>{'    '}<span className="prop">summary</span><span className="punc">:</span> <span className="punc">[</span></CodeLine>
-                {bullets.map((b, i) => (
-                  <CodeLine key={i} n={nextLine()}>
-                    {'      '}<span className="str">&quot;{b}&quot;</span><span className="punc">,</span>
-                  </CodeLine>
-                ))}
-                <CodeLine n={nextLine()}>{'    '}<span className="punc">],</span></CodeLine>
+                <CodeLine n={nextLine()}>
+                  {'    '}<span className="prop">summary</span><span className="punc">:</span> <span className="str">&quot;{p.swSummary}&quot;</span><span className="punc">,</span>
+                </CodeLine>
                 <CodeLine n={nextLine()}>
                   {'  '}<span className="punc">{isLast ? '}' : '},'}</span>{' '}
                   <span className="com">

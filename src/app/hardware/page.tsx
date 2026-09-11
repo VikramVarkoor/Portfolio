@@ -44,9 +44,7 @@ export default function HardwarePage() {
                 <div className="corner r" />
                 <div className="tag">{SPEC_TAGS[id]}</div>
                 <h3>{p.title}</h3>
-                <ul className="spec-bullets">
-                  {(p.hwBullets || []).map((b, i) => <li key={i}>{b}</li>)}
-                </ul>
+                <p className="specsum">{p.hwSummary}</p>
                 <div className="specs">
                   {p.tags.slice(0, 3).map(t => <span key={t}>{t}</span>)}
                 </div>

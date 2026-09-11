@@ -12,13 +12,14 @@ export interface Project {
   tags: string[]
   links: ProjectLink[]
   lenses?: ('hardware' | 'software')[]
-  // Lens-specific cuts of this project: a short bullet list for the inline
-  // spec-sheet/editor summary, and a longer deep-dive shown behind its own
-  // "breakdown" link, so the hardware and software pages each surface the
-  // facts relevant to that angle instead of one shared paragraph.
-  hwBullets?: string[]
+  // Lens-specific cuts of this project: a short 2-3 line summary for the
+  // inline spec-sheet/editor row, and a longer deep-dive (with its own
+  // bullet list) shown behind a dedicated "deep-dive" link, so the hardware
+  // and software pages each surface the facts relevant to that angle
+  // instead of one shared paragraph.
+  hwSummary?: string
   hwDeepDive?: string
-  swBullets?: string[]
+  swSummary?: string
   swDeepDive?: string
 }
 
@@ -39,13 +40,7 @@ export const projects: Project[] = [
     tags: ['Vitis HLS', 'Vivado', 'Zynq-7020', 'XGBoost', 'Optuna', 'Next.js 16', 'TypeScript', 'Tailwind CSS v4'],
     links: [{ label: 'Demo ▶', href: '#' }],
     lenses: ['hardware', 'software'],
-    hwBullets: [
-      'Vitis HLS 2022.1 kernel synthesized to RTL and mapped onto the Zynq-7020 fabric via Vivado.',
-      '100MHz clock domain: 10.95ns actual critical path against a 15ns timing constraint.',
-      "13% LUT / 22% DSP block utilization on the PYNQ-Z2's programmable logic.",
-      'ARM Cortex-A9 to FPGA bridge over AXI4-Stream DMA on shared DDR, zero-overhead handoff.',
-      '1.32s bilateral GLCM feature extraction running entirely in hardware.',
-    ],
+    hwSummary: "Vitis HLS 2022.1 kernel synthesized to RTL and mapped onto the Zynq-7020 fabric via Vivado, closing timing at 100MHz (10.95ns actual vs. a 15ns constraint) at 13% LUT and 22% DSP utilization. The ARM Cortex-A9 talks to the FPGA over AXI4-Stream DMA on shared DDR, so the 1.32s bilateral GLCM extraction runs entirely in hardware without blocking the ARM core.",
     hwDeepDive: `<p>The hardware brief here was inference speed on commodity silicon: get an MRI scan to a diagnosis fast enough to be clinically useful, on a board that costs less than a night in the hospital it's meant to serve. Vitis HLS let the GLCM feature-extraction pipeline get written in C++ with pipeline directives rather than hand-rolled RTL, then get synthesized down onto the Zynq-7020's programmable logic through Vivado.</p>
       <ul>
         <li>The extraction pipeline itself: an 8-block (2x2x2) decomposition of the hippocampal ROI, computing a local 3D Grey-Level Co-occurrence Matrix per block, pulling 252 Haralick texture features per scan across 13 spatial directions at 3 voxel distances.</li>
@@ -53,12 +48,7 @@ export const projects: Project[] = [
         <li>The ARM Cortex-A9 talks to the FPGA fabric over AXI4-Stream DMA on shared DDR memory, so the ARM core stays fully available for the ML classifier and dashboard logic while the FPGA is mid-extraction, rather than blocking on it.</li>
         <li>End to end: 1.32s of that pipeline runs in hardware, contributing to a 17-second total inference time on a $269 PYNQ-Z2 board, versus $3,000-10,000 for a GPU-equivalent setup.</li>
       </ul>`,
-    swBullets: [
-      'Full-stack clinical dashboard built in Next.js 16.1, React 19, and TypeScript.',
-      'Interactive 3D MRI viewer with Grad-CAM heatmap overlays and SHAP-style attribution.',
-      'FPGA vs. CPU benchmark analytics alongside a longitudinal case timeline.',
-      'One-click PDF report export for clinical use.',
-    ],
+    swSummary: 'A full-stack clinical dashboard in Next.js 16.1, React 19, and TypeScript wraps the FPGA output: an interactive 3D MRI viewer with Grad-CAM heatmap overlays and SHAP-style feature attribution. FPGA vs. CPU benchmark analytics, a longitudinal case timeline, and one-click PDF report export round it out.',
     swDeepDive: `<p>The application layer's job is turning what the FPGA and the classifier produce into something a clinician can actually read. The three-task cascade ML classifier (XGBoost tuned with Optuna) runs AD vs. CN, CN vs. MCI, and Stable vs. Converting MCI, fusing the GLCM features with CSF biomarkers and clinical metadata, achieving AUC 0.903 / 0.803 / 0.779 respectively across 3,436 ADNI scans.</p>
       <ul>
         <li>The dashboard renders that output as an interactive 3D MRI viewer with Grad-CAM heatmap overlays showing where the model is actually looking, plus SHAP-style feature attribution for the tabular biomarker side.</li>
@@ -84,12 +74,7 @@ export const projects: Project[] = [
       </ul>`,
     tags: ['TypeScript', 'Next.js 14', 'Redux Toolkit', 'Jest/RTL', 'Cypress', 'Webpack', 'Python', 'scikit-learn', 'Supabase', 'Recharts'],
     links: [{ label: 'GitHub', href: '#' }, { label: 'Live ↗', href: '#' }],
-    swBullets: [
-      '61-test Jest/RTL suite across 5 suites, one component built strictly test-first via TDD.',
-      '9-assertion Cypress E2E suite covering the critical trading flow.',
-      'Real-time Supabase subscriptions replacing 30-second polling, with row-level security.',
-      'Custom Webpack config: SVGR typed SVG imports, path aliases, and a bundle analyzer.',
-    ],
+    swSummary: 'A 61-test Jest/RTL suite across 5 suites plus a 9-assertion Cypress E2E test covers the trading flow, with one component built strictly test-first via TDD. Real-time Supabase subscriptions (replacing 30-second polling) with row-level security drive the live dashboard, on a build using a custom Webpack config for typed SVG imports and bundle analysis.',
     swDeepDive: `<p>The software side of an autonomous trading agent has to answer a harder question than "does it work": does it work honestly. Risk management is enforced at both the prompt and code level, a minimum 0.55 confidence threshold, a mandatory 2:1 reward-to-risk ratio, no pyramiding into open positions, and automatic closure on stop-loss or take-profit, plus persistent agent memory where the last 5 trade outcomes feed back into every new decision.</p>
       <ul>
         <li>The live dashboard runs on real-time Supabase subscriptions rather than 30-second polling, with P&amp;L tracking via Recharts and row-level security separating public reads from service-role writes.</li>
@@ -114,12 +99,7 @@ export const projects: Project[] = [
     tags: ['Next.js 15', 'TypeScript', 'Supabase', 'Groq API', 'Vercel'],
     links: [{ label: 'GitHub', href: '#' }, { label: 'Live ↗', href: '#' }],
     lenses: ['software'],
-    swBullets: [
-      'Parallel worker execution across 3 LLMs via a single orchestrated SSE pipeline.',
-      'Judge orchestrator agent: Jaccard similarity agreement scoring, then reconciled synthesis.',
-      'Auth-gated query history and shareable links on Supabase Postgres.',
-      'All three model cards stream concurrently via Promise.all.',
-    ],
+    swSummary: 'Parallel worker execution queries 3 LLMs simultaneously through one orchestrated pipeline, with real-time SSE streaming so all three model cards populate concurrently via Promise.all. A judge orchestrator agent reconciles the results with Jaccard similarity agreement scoring, backed by auth-gated query history on Supabase Postgres.',
     swDeepDive: `<p>Querying three models at once is easy. Making the results useful together is the actual problem. Lumen runs parallel worker execution across 3 models simultaneously (Llama 3.3 70B, Qwen 3 32B, Kimi K2) through a single orchestrated request pipeline, with real-time SSE streaming so all three model cards populate concurrently via Promise.all rather than waiting on the slowest one.</p>
       <ul>
         <li>A judge orchestrator agent does the reconciliation in two steps: Jaccard similarity-based inter-agent agreement scoring (0-100%) first, then a synthesized answer drawing from all three outputs rather than just picking one.</li>
@@ -141,12 +121,7 @@ export const projects: Project[] = [
     tags: ['Python', 'NumPy FFT', 'Arduino Uno', 'PySerial', 'matplotlib'],
     links: [{ label: 'GitHub', href: '#' }],
     lenses: ['hardware'],
-    hwBullets: [
-      'Arduino Uno samples 64-point analog bursts from a simulated voltage transducer.',
-      'Raw ADC data streams over Serial (PySerial) to a Python host for processing.',
-      'NumPy FFT converts each burst from time domain to frequency domain.',
-      'UTF-8 stream-noise handling keeps the serial link stable under real interference.',
-    ],
+    hwSummary: "An Arduino Uno samples 64-point analog bursts from a simulated voltage transducer and streams raw ADC data over Serial (PySerial) to a Python host. There, a NumPy FFT converts each burst to the frequency domain for THD detection, with explicit UTF-8 error handling keeping the serial link stable under real interference.",
     hwDeepDive: `<p>This one's about catching a signal problem at the moment it happens rather than after the fact. An Arduino Uno captures 64-point analog bursts standing in for a voltage transducer reading, and streams them over Serial rather than batching and uploading later, since a real power-quality fault doesn't wait around.</p>
       <ul>
         <li>Each 64-point burst gets run through an FFT (NumPy) on the Python host, converting the raw time-domain samples into a frequency spectrum, which is what lets fundamental frequency and Total Harmonic Distortion (THD) actually get identified rather than eyeballed.</li>
@@ -171,12 +146,7 @@ export const projects: Project[] = [
     tags: ['MQTT', 'ZigBee', 'Tuya Platform', 'Hikvision Systems', 'IoT Validation'],
     links: [],
     lenses: ['hardware'],
-    hwBullets: [
-      'Hands-on validation across 15+ IoT device types: intercoms, radar sensors, smart locks, ACs, energy clamps, gateways.',
-      'Designed the standardized 17-step test procedure, power-up through stress testing.',
-      'Worked directly with MQTT, ZigBee, and the Tuya platform for device integration.',
-      'Built a 30+ device specs and reliability catalogue from hands-on measurement.',
-    ],
+    hwSummary: '422 hours of hands-on validation across 15+ IoT device types (intercoms, radar sensors, smart locks, ACs, energy clamps, gateways), using a standardized 17-step test procedure from power-up through stress testing. Worked directly with MQTT, ZigBee, and the Tuya platform, building a 30+ device specs and reliability catalogue from hands-on measurement.',
     hwDeepDive: `<p>422 hours, mostly spent finding out where hardware disagrees with its own spec sheet. The core of the role was structured validation and functional testing across 15+ IoT device types, Hikvision intercoms running facial recognition, fingerprint, biometric, and password modes, radar presence and motion sensors, smart door locks, smart ACs, energy clamps, and multi-mode gateways.</p>
       <ul>
         <li>Designed a standardized 17-step testing procedure from scratch: power-up, protocol handshake, network connectivity, latency, backend data validation, UI correctness, edge-case handling, and stress testing, so every device got measured the same way regardless of what it was.</li>
@@ -200,12 +170,7 @@ export const projects: Project[] = [
     tags: ['Next.js 14', 'FastAPI', 'Python', 'fastembed', 'NumPy', 'Groq API', 'Tailwind CSS'],
     links: [{ label: 'GitHub', href: '#' }, { label: 'Live ↗', href: '#' }],
     lenses: ['software'],
-    swBullets: [
-      'fastembed (ONNX) + custom NumPy cosine similarity, replacing PyTorch + ChromaDB.',
-      "Full pipeline running under 80MB RAM on Render's free tier, down from ~500MB.",
-      'Batched indexing (8 chunks at a time) to avoid memory spikes.',
-      'SSE streaming at ~800 tokens/sec via Groq API, with a live sources panel.',
-    ],
+    swSummary: "Swapped PyTorch and ChromaDB for fastembed (ONNX) and a custom NumPy cosine similarity implementation, dropping the full embedding pipeline from ~500MB to under 80MB RAM on Render's free tier. Batched indexing avoids memory spikes, and responses stream over SSE at ~800 tokens/sec via Groq API with a live sources panel.",
     swDeepDive: `<p>The interesting engineering decision here wasn't the RAG pattern itself, it's what got ripped out to make it fit on a free-tier server. The original PyTorch + ChromaDB stack ran at ~500MB, well past what Render's free tier gives you. Swapping to fastembed (ONNX runtime, BAAI/bge-small-en-v1.5) plus a custom NumPy cosine similarity implementation got the full embedding pipeline under 80MB.</p>
       <ul>
         <li>Indexing batches 8 chunks at a time specifically to avoid memory spikes, with ~500-word chunks and overlap, and retrieves the top 4-5 chunks per query via 384-dimension cosine similarity.</li>
@@ -269,12 +234,7 @@ export const projects: Project[] = [
     tags: ['Python', 'TensorFlow/Keras', 'OpenCV', 'MobileNet', 'Raspberry Pi GPIO'],
     links: [{ label: 'GitHub', href: '#' }],
     lenses: ['hardware'],
-    hwBullets: [
-      'GPIO-controlled stepper and servo motors respond directly to each classification result.',
-      'Full edge deployment: inference, motor control, and camera feed all run locally on a Raspberry Pi.',
-      'OpenCV captures and preprocesses camera frames in real time for the classifier.',
-      'No cloud dependency: a closed loop from camera to physical bin movement.',
-    ],
+    hwSummary: 'OpenCV captures and preprocesses camera frames in real time, feeding a MobileNet classifier whose result drives GPIO-controlled stepper and servo motors to physically redirect each item. Inference, motor control, and camera feed all run locally on a Raspberry Pi, closing the loop with no cloud dependency.',
     hwDeepDive: `<p>The interesting part of this one isn't the classifier, it's what happens after it decides. A MobileNet CNN fine-tuned on a custom 12-class waste dataset (battery, biological, cardboard, plastic, metal, glass variants, paper, clothes, shoes, trash) hits about 97% Top-1 accuracy after 50 training epochs, but that number only matters if something physical acts on it.</p>
       <ul>
         <li>OpenCV handles capture and preprocessing of camera frames in real time, at speeds workable for embedded deployment rather than a lab benchmark.</li>

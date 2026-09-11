@@ -1,161 +1,338 @@
-export const projects = [
+export interface ProjectLink {
+  label: string
+  href: string
+}
+
+export interface Project {
+  id: string
+  kicker: string
+  title: string
+  short: string
+  body: string
+  tags: string[]
+  links: ProjectLink[]
+  lenses?: ('hardware' | 'software')[]
+}
+
+export const projects: Project[] = [
   {
-    title: 'Synapse.PL — HEAD System',
-    description:
-      'Hardware-Accelerated Explainable Alzheimer\'s Detection system achieving end-to-end MRI-to-diagnosis inference in 17 seconds on a $269 FPGA platform (Xilinx Zynq-7020), vs $3,000–$10,000 GPU-equivalent solutions. Full-stack clinical dashboard with 3D MRI viewer, Grad-CAM heatmaps, and SHAP attribution.',
-    tags: ['Vitis HLS', 'Vivado', 'Zynq-7020', 'XGBoost', 'Next.js', 'TypeScript'],
-    accent: 'purple',
-    github: null,
-    live: null,
-    video: '/synapse-demo.mp4',
+    id: 'synapse',
+    kicker: 'Senior Design · FPGA / Applied AI',
+    title: 'Synapse.PL / HEAD System',
+    short: "FPGA-accelerated Alzheimer's detection, 17s inference on a $269 board.",
+    body: `<p>Hardware-Accelerated Explainable Alzheimer's Detection (HEAD) system achieving end-to-end MRI-to-diagnosis inference in 17 seconds on a $269 FPGA platform (Xilinx Zynq-7020 SoC on PYNQ-Z2), versus $3,000-10,000 GPU-equivalent solutions.</p>
+      <ul>
+        <li>3-person senior design team with two Computer Engineering students; sole contributor for GLCM texture feature extraction: designed a local block 3D Grey-Level Co-occurrence Matrix pipeline extracting 252 Haralick texture features per scan across 13 spatial directions at 3 voxel distances, from an 8-block (2x2x2) decomposition of the hippocampal ROI.</li>
+        <li>Implemented the FPGA accelerator in Vitis HLS 2022.1 (C++ with HLS pipeline directives), synthesized to RTL and mapped onto the Zynq-7020 fabric via Vivado: 1.32s bilateral extraction, 100MHz clock (10.95ns actual vs. 15ns constraint), 13% LUT and 22% DSP block utilization.</li>
+        <li>Architected an ARM Cortex-A9 to FPGA interface via AXI4-Stream DMA on shared DDR memory, enabling zero-overhead data transfer and full ARM availability during FPGA execution.</li>
+        <li>Three-task cascade ML classifier (XGBoost + Optuna) achieving AUC 0.903 (AD vs. CN), 0.803 (CN vs. MCI), 0.779 (Stable vs. Converting MCI) on 3,436 ADNI scans, fusing GLCM features, CSF biomarkers, and clinical metadata.</li>
+        <li>Full-stack clinical dashboard in Next.js 16.1 / React 19 / TypeScript: interactive 3D MRI viewer, Grad-CAM heatmap overlays, SHAP-style feature attribution, FPGA vs. CPU benchmark analytics, longitudinal case timeline, one-click PDF report export.</li>
+      </ul>`,
+    tags: ['Vitis HLS', 'Vivado', 'Zynq-7020', 'XGBoost', 'Optuna', 'Next.js 16', 'TypeScript', 'Tailwind CSS v4'],
+    links: [{ label: 'Demo ▶', href: '#' }],
+    lenses: ['hardware', 'software'],
   },
   {
-    title: 'Lumen',
-    description:
-      'Multi-model LLM orchestration platform with parallel querying across 3 models, a judge agent using Jaccard similarity scoring, and SSE streaming. Production deployed.',
-    tags: ['Next.js', 'TypeScript', 'Supabase', 'Groq API', 'Vercel'],
-    accent: 'blue',
-    github: 'https://github.com/VikramVarkoor/Lumen',
-    live: 'https://lumen-ten-psi.vercel.app',
-    video: '/lumen-demo.mp4',
-  },
-  {
-    title: 'PaperChat',
-    description:
-      'RAG-powered document chatbot — upload a PDF and chat with it in real time. Built a custom embedding pipeline using fastembed (ONNX) + NumPy cosine similarity to run the full RAG stack under 80MB RAM on a free-tier backend, down from ~500MB with PyTorch. Streams answers token by token with source citations.',
-    tags: ['Next.js', 'FastAPI', 'Python', 'fastembed', 'Groq API', 'RAG', 'Vercel'],
-    accent: 'teal',
-    github: 'https://github.com/VikramVarkoor/PaperChat',
-    live: 'https://paper-chat-five.vercel.app',
-    video: '/paperchat-demo.mp4',
-  },
-  {
+    id: 'deriv',
+    kicker: 'Production Deployed · Trading / AI',
     title: 'Deriv Trading Agent',
-    description:
-      'Production-deployed autonomous AI trading dashboard for EUR/USD paper trading. Full modern frontend toolchain — Redux Toolkit state management, a 61-test Jest/RTL suite, one component built strictly test-first via TDD, and a 9-assertion Cypress E2E suite, backed by a custom Webpack config (SVGR, path aliases, bundle analyzer). Statistical validation layer in Python caught and fixed a real data leakage bug, landing on an honest 52.51% accuracy vs a 46.59% naive baseline.',
-    tags: ['TypeScript', 'Next.js', 'Redux Toolkit', 'Jest/RTL', 'Cypress', 'Python', 'scikit-learn'],
-    accent: 'blue',
-    github: 'https://github.com/VikramVarkoor/Deriv-Trading-Agent',
-    live: 'https://deriv-agent.vercel.app',
+    short: 'Autonomous EUR/USD paper-trading agent with real statistical backtesting.',
+    body: `<p>End-to-end autonomous paper-trading system for EUR/USD: ingests live 5-minute candle data from Twelve Data, feeds market context and trade history to an LLM for BUY/SELL/HOLD decisions with confidence scores, and executes trades via Deriv's demo API.</p>
+      <ul>
+        <li>Risk management enforced at both prompt and code level: minimum 0.55 confidence threshold, mandatory 2:1 reward-to-risk ratio, no pyramiding into open positions, automatic closure on stop-loss/take-profit.</li>
+        <li>Persistent agent memory: the last 5 trade outcomes feed back into every new decision, explicitly prompting caution after consecutive losses.</li>
+        <li>Live dashboard with real-time Supabase subscriptions (replacing 30-second polling), P&amp;L tracking via Recharts, confidence visualization, and row-level security separating public reads from service-role writes.</li>
+        <li>Separate statistical validation layer in Python: logistic regression for directional prediction using lagged returns, RSI-14, SMA-20 deviation, and momentum features, trained on 5,000 hours of historical data with a chronological 80/20 split, yielding 52.51% directional accuracy vs. a 46.59% naive baseline.</li>
+        <li>Caught and fixed a data-leakage bug that had produced a misleading 95.88% backtest accuracy, then validated the honest result with Wilson confidence intervals.</li>
+        <li>61-test Jest/RTL suite across 5 suites (P&amp;L calculations, all 4 Redux reducers, component rendering); one component built strictly test-first via red-green-refactor TDD; a 9-assertion Cypress E2E suite covering the critical user flow.</li>
+        <li>Custom Webpack config in next.config.js: SVGR for typed SVG imports, explicit path aliases, and a bundle analyzer.</li>
+      </ul>`,
+    tags: ['TypeScript', 'Next.js 14', 'Redux Toolkit', 'Jest/RTL', 'Cypress', 'Webpack', 'Python', 'scikit-learn', 'Supabase', 'Recharts'],
+    links: [{ label: 'GitHub', href: '#' }, { label: 'Live ↗', href: '#' }],
+    lenses: ['software'],
   },
   {
-    title: 'Pitch Angle Finder',
-    description:
-      'AI app that generates realistic PR pitch angles from a plain-English company description. The system prompt evaluates five explicit newsworthiness factors — timeliness, human interest, data/surprise, industry relevance, and conflict. Diagnosed and fixed a live production issue caused by a deprecated LLM model returning 404s, and built a genuine retry mechanism for LLM output reliability, backed by an automated test and verified against production.',
-    tags: ['Python', 'FastAPI', 'Pydantic', 'Next.js', 'TypeScript', 'Groq API', 'pytest'],
-    accent: 'purple',
-    github: 'https://github.com/VikramVarkoor/pitch-angle-finder',
-    live: 'https://pitch-angle-finder.vercel.app',
+    id: 'lumen',
+    kicker: 'Production Deployed · LLM Tooling',
+    title: 'Lumen',
+    short: 'Multi-model LLM aggregator with a judge agent and live SSE streaming.',
+    body: `<p>Multi-agent LLM aggregator with parallel worker execution across 3 models simultaneously (Llama 3.3 70B, Qwen 3 32B, Kimi K2) via a single orchestrated request pipeline.</p>
+      <ul>
+        <li>Real-time SSE streaming architecture enables concurrent per-agent token delivery, all three model cards populating simultaneously using Promise.all.</li>
+        <li>Judge orchestrator agent performs two-step synthesis: Jaccard similarity-based inter-agent agreement scoring (0-100%), then a reconciled answer drawing from all model outputs.</li>
+        <li>Automated per-agent benchmarking: 1-10 scoring on accuracy, depth, and clarity, plus a one-line critique per model and winner selection.</li>
+        <li>Deployed on Vercel with Supabase Postgres for auth-gated query history, shareable links, and markdown export.</li>
+      </ul>`,
+    tags: ['Next.js 15', 'TypeScript', 'Supabase', 'Groq API', 'Vercel'],
+    links: [{ label: 'GitHub', href: '#' }, { label: 'Live ↗', href: '#' }],
+    lenses: ['software'],
   },
   {
-    title: 'AI Audit Risk Analyzer',
-    description:
-      '4-agent sequential pipeline using CrewAI where each agent passes structured output as context to the next. Governance agent performs hallucination detection and PII compliance checks.',
-    tags: ['CrewAI', 'LangChain', 'Gemini API', 'Streamlit', 'Python'],
-    accent: 'amber',
-    github: 'https://github.com/VikramVarkoor/Audit-agent',
-    live: null,
-  },
-  {
-    title: 'Smart Bin',
-    description:
-      'AI-powered smart recycling system that automatically identifies and sorts waste into categories using computer vision. Submitted at AUS Sharjah Hackathon.',
-    tags: ['Python', 'Computer Vision', 'ML', 'OpenCV', 'Embedded'],
-    accent: 'purple',
-    github: 'https://github.com/VikramVarkoor/Smart-Bin',
-    live: null,
-  },
-  {
-    title: 'AI HandsFree OS Controller',
-    description:
-      'HCI tool using Computer Vision and Face Topology for touchless system control. Engineered a native AppleScript bridge to resolve macOS security sandboxing.',
-    tags: ['Python', 'OpenCV', 'Face Topology', 'AppleScript', 'HCI'],
-    accent: 'teal',
-    github: 'https://github.com/VikramVarkoor/AI-HandsFree-OS-Controller',
-    live: null,
-  },
-  {
+    id: 'powerquality',
+    kicker: 'Personal Project · Embedded / DSP',
     title: 'Power Quality Spectral Analyzer',
-    description:
-      'Real-time DSP tool using Arduino and Python to perform FFT spectral analysis on power signals for harmonic distortion detection and fault monitoring.',
-    tags: ['Python', 'Arduino', 'FFT', 'DSP', 'Signal Processing'],
-    accent: 'green',
-    github: 'https://github.com/VikramVarkoor/Power-Quality-Spectral-Analyzer',
-    live: null,
+    short: 'Real-time FFT harmonic detection bridging DSP theory and physical hardware.',
+    body: `<p>Real-time DSP system for detecting harmonic distortion in AC power signals: an Arduino Uno captures 64-point analog data bursts from a simulated voltage transducer and streams them over Serial to a Python host.</p>
+      <ul>
+        <li>Python engine applies an FFT (NumPy) to convert each burst from time domain to frequency domain, enabling fundamental frequency identification and Total Harmonic Distortion (THD) calculation.</li>
+        <li>Dual-domain live visualization in matplotlib: raw time-domain waveform on the left, frequency spectrum with harmonic peaks highlighted on the right, updating in real time.</li>
+        <li>UTF-8 error handling manages asynchronous stream noise from the serial connection, keeping the pipeline stable under noisy communication.</li>
+      </ul>`,
+    tags: ['Python', 'NumPy FFT', 'Arduino Uno', 'PySerial', 'matplotlib'],
+    links: [{ label: 'GitHub', href: '#' }],
+    lenses: ['hardware'],
   },
   {
-    title: 'Smart Grid Theft Detector',
-    description:
-      'Prototype smart energy meter using edge computing logic to detect non-technical losses (power theft), with a real-time Python dashboard and automated anomaly alerts.',
-    tags: ['Python', 'Edge Computing', 'Anomaly Detection', 'IoT', 'Dashboard'],
-    accent: 'blue',
-    github: 'https://github.com/VikramVarkoor/Smart-Grid-Theft-Detector',
-    live: null,
+    id: 'syncrow',
+    kicker: 'Internship · Hardware R&D',
+    title: 'Syncrow IoT: Hardware R&D Internship',
+    short: '422hr hardware validation internship across 15+ IoT device types.',
+    body: `<p>Hardware R&D Intern, Dubai, UAE, May 2025 to September 2025, ~422 hours.</p>
+      <ul>
+        <li>Structured hardware validation and functional testing of 15+ IoT devices, including Hikvision intercoms (facial recognition, fingerprint, biometric, password modes), radar presence/motion sensors, smart door locks, smart ACs, energy clamps, and multi-mode gateways.</li>
+        <li>Designed a standardized 17-step testing procedure: power-up, protocol handshake, network connectivity, latency, backend data validation, UI correctness, edge-case handling, and stress testing.</li>
+        <li>Performed regression testing of the Syncrow Analytics dashboard, logging bugs and retesting after fixes via an internal issue tracker.</li>
+        <li>Built a structured device catalogue documenting specs, measurement accuracy, reliability ratings, and integration capabilities for 30+ devices.</li>
+        <li>Authored validation requirements documentation, working cross-functionally with the product owner and data scientist.</li>
+        <li>Worked with the Tuya platform for smart device integration; researched MQTT, ZigBee, and wired vs. wireless IoT architectures.</li>
+      </ul>`,
+    tags: ['MQTT', 'ZigBee', 'Tuya Platform', 'Hikvision Systems', 'IoT Validation'],
+    links: [],
+    lenses: ['hardware'],
   },
   {
-    title: 'Retail Operations Analytics',
-    description:
-      'End-to-end analytics pipeline processing 10,000+ rows of retail sales data. Advanced SQL with CTEs, LAG window functions, and a Tableau dashboard covering regional KPIs, MoM growth, and anomaly detection.',
-    tags: ['Python', 'SQL', 'Tableau', 'SQLite', 'pandas'],
-    accent: 'amber',
-    github: 'https://github.com/VikramVarkoor/Retail-Operations-Analytics',
-    live: null,
+    id: 'paperchat',
+    kicker: 'Production Deployed · RAG / AI',
+    title: 'PaperChat',
+    short: 'RAG PDF chatbot running under 80MB RAM on a free-tier backend.',
+    body: `<p>Full-stack RAG application where users upload a PDF and chat with it in real time: finds the most relevant sections via semantic search and streams answers token by token with source citations.</p>
+      <ul>
+        <li>Replaced PyTorch + ChromaDB with fastembed (ONNX runtime, BAAI/bge-small-en-v1.5) + custom NumPy cosine similarity to run the full embedding pipeline under 80MB RAM on Render's free tier, down from ~500MB with PyTorch.</li>
+        <li>Batch processing (8 chunks at a time) during indexing to prevent memory spikes: ~500-word chunks with overlap, top 4-5 chunks retrieved per query via 384-dimension cosine similarity.</li>
+        <li>SSE streaming delivers responses at ~800 tokens/sec via Groq API, with a sources panel surfacing the exact sections used.</li>
+        <li>Next.js 14 App Router frontend on Vercel, FastAPI/Uvicorn backend on Render, full CORS config, zero infrastructure cost, fully live.</li>
+      </ul>`,
+    tags: ['Next.js 14', 'FastAPI', 'Python', 'fastembed', 'NumPy', 'Groq API', 'Tailwind CSS'],
+    links: [{ label: 'GitHub', href: '#' }, { label: 'Live ↗', href: '#' }],
+    lenses: ['software'],
   },
   {
-    title: 'Carbon Emission & CSR Tracker',
-    description:
-      'Odoo-based CSR and sustainability analytics module with KPI monitoring, automated threshold alerts, supplier audit management, and geospatial dashboards for multi-site performance tracking.',
-    tags: ['JavaScript', 'Odoo', 'PostgreSQL', 'Geospatial', 'Analytics'],
-    accent: 'green',
-    github: 'https://github.com/VikramVarkoor/Carbon-Emission-and-Sustainabillity-tracker-with-image-detection',
-    live: null,
+    id: 'pitch',
+    kicker: 'Production Deployed · AI / PR Tooling',
+    title: 'Pitch Angle Finder',
+    short: 'AI PR-angle generator with a genuine production reliability fix.',
+    body: `<p>Full-stack AI application (FastAPI backend, Next.js/TypeScript frontend) generating realistic PR pitch angles from a live LLM call, with a system prompt encoding five explicit newsworthiness criteria and structured JSON output validated against a Pydantic schema before reaching the client.</p>
+      <ul>
+        <li>Diagnosed a live production failure (a deprecated LLM model returning 404s) through direct testing against the deployed API, fixed it, and made the model configurable via environment variable to prevent recurrence.</li>
+        <li>Built and shipped a retry mechanism handling two distinct LLM reliability failure modes (incomplete output, malformed JSON), covered by an automated test exercising the real retry path and verified with repeated live production calls.</li>
+        <li>Deployed independently to Render and Vercel with git-triggered CI/CD, environment-based CORS/secrets handling, and a reproducible one-click blueprint config.</li>
+      </ul>`,
+    tags: ['Python', 'FastAPI', 'Pydantic', 'Next.js', 'TypeScript', 'Groq API', 'pytest', 'Render', 'Vercel'],
+    links: [{ label: 'GitHub', href: '#' }, { label: 'Live ↗', href: '#' }],
   },
   {
+    id: 'audit',
+    kicker: 'Portfolio Project · AI Governance',
+    title: 'AI Audit Risk Analyzer',
+    short: '4-agent CrewAI pipeline with a governance sign-off gate.',
+    body: `<p>4-agent sequential audit pipeline using CrewAI: Risk Identifier, Internal Controls Specialist, Report Writer, and AI Governance Reviewer, each with a distinct role, goal, and backstory shaping its behavior.</p>
+      <ul>
+        <li>Governance Reviewer agent acts as the final quality gate: checks generated content for hallucinations, PII leakage, and tone compliance before output is surfaced, directly implementing enterprise responsible-AI principles.</li>
+        <li>LangChain handles document ingestion for both PDF and plain-text input; Streamlit provides drag-and-drop upload with real-time spinner feedback during agent execution.</li>
+        <li>Uses CrewAI's Process.sequential mode, where each task's output is automatically passed as context to the next agent, eliminating manual state management.</li>
+      </ul>`,
+    tags: ['Python', 'CrewAI', 'LangChain', 'Gemini API', 'Streamlit'],
+    links: [{ label: 'GitHub', href: '#' }],
+  },
+  {
+    id: 'smartmeter',
+    kicker: 'Portfolio Project · Data Engineering',
     title: 'Smart Meter Analytics at Scale',
-    description:
-      'Distributed data pipeline benchmarking PySpark against pandas at scale. Built a synthetic IoT power dataset generator producing 10.5M readings across 300 devices, partitioned into Parquet files by year/month for partition pruning. Implemented a 4-query Spark SQL analytics layer (peak-window detection, anomaly tracking, cost aggregation) and benchmarked it honestly against a single-node pandas baseline from 100k to 5M rows, including cases where Spark lost due to shuffle overhead.',
-    tags: ['PySpark', 'Spark SQL', 'pandas', 'Parquet', 'NumPy'],
-    accent: 'teal',
-    github: 'https://github.com/VikramVarkoor/Smart-meter-analytics',
-    live: null,
+    short: 'PySpark vs. pandas honestly benchmarked from 100k to 10.5M rows.',
+    body: `<p>Synthetic IoT data generator simulating 300 devices (HVAC, EV chargers, water heaters, lighting) across a full year at 15-minute intervals: 10,512,000 rows with realistic double-peak daily load curves, weekend uplift multipliers, and 1.5% injected anomalies (theft spikes, dropouts), written as partitioned Parquet for partition pruning.</p>
+      <ul>
+        <li>Implemented the same 4 analytics queries (peak-window detection, consecutive overload intervals via window functions, weekly anomaly rate tracking, tiered time-of-use cost estimation) in both PySpark and the original pandas/SQLite stack, to directly benchmark distributed vs. single-node processing.</li>
+        <li>Benchmark harness at 100k, 1M, and 5M rows: pandas wins by 7-30x at 100k rows (Spark's JVM startup overhead), Spark overtakes on aggregation-heavy queries by 1M rows, and is 8-10x faster at 5M rows on windowed aggregations, while honestly reporting where Spark loses (the interval-detection query stays pandas-favored through 5M rows due to shuffle cost; pandas couldn't run the full 10.5M row set in-memory at all).</li>
+        <li>README documents the full pandas-to-Spark conceptual shift: lazy evaluation, DAG execution, the Catalyst optimizer, partition pruning, and when Spark is actually the wrong tool.</li>
+      </ul>`,
+    tags: ['Python', 'PySpark', 'Spark SQL', 'pandas', 'SQLite', 'NumPy', 'Parquet'],
+    links: [{ label: 'GitHub', href: '#' }],
+  },
+  {
+    id: 'smartbin',
+    kicker: 'Hackathon Build · Computer Vision',
+    title: 'Smart Bin',
+    short: '97% Top-1 waste classifier with closed-loop physical actuation.',
+    body: `<p>Autonomous waste segregation system, submitted at the AUS Sharjah Hackathon. Fine-tuned a MobileNet CNN on a custom 12-class waste dataset (battery, biological, cardboard, plastic, metal, glass variants, paper, clothes, shoes, trash), achieving ~97% Top-1 accuracy after 50 training epochs.</p>
+      <ul>
+        <li>Live inference pipeline uses OpenCV to capture, preprocess, and classify camera frames in real time, at speeds suitable for embedded deployment.</li>
+        <li>Classification result drives GPIO-controlled stepper and servo motors to physically redirect the item into the correct bin, closing the loop between inference and actuation.</li>
+        <li>Full edge deployment: inference, motor control, and camera feed all run locally on Raspberry Pi with no cloud dependency.</li>
+      </ul>`,
+    tags: ['Python', 'TensorFlow/Keras', 'OpenCV', 'MobileNet', 'Raspberry Pi GPIO'],
+    links: [{ label: 'GitHub', href: '#' }],
+    lenses: ['hardware'],
+  },
+  {
+    id: 'handsfree',
+    kicker: 'Personal Project · HCI / Computer Vision',
+    title: 'AI HandsFree OS Controller',
+    short: 'Touchless macOS volume control via real-time head-pose tracking.',
+    body: `<p>Computer vision HCI tool enabling fully hands-free macOS volume control via real-time head-pose tracking from a standard webcam, no specialized hardware required.</p>
+      <ul>
+        <li>OpenCV + Haar Cascade Classifier localize the face per frame; horizontal offset from screen center determines lean direction and magnitude, with a configurable deadzone to prevent false triggers from natural head sway.</li>
+        <li>Key challenge: macOS accessibility sandboxing blocks standard automation libraries like PyAutoGUI from touching system audio. Bypassed it with a native AppleScript bridge talking directly to Core Audio, achieving reliable control without accessibility permissions.</li>
+      </ul>`,
+    tags: ['Python', 'OpenCV', 'Haar Cascade', 'AppleScript', 'macOS Core Audio'],
+    links: [{ label: 'GitHub', href: '#' }],
+  },
+  {
+    id: 'theft',
+    kicker: 'Personal Project · Edge / IoT',
+    title: 'Smart Grid Theft Detector',
+    short: 'Edge-thresholded non-technical-loss detector with live red-alert visualization.',
+    body: `<p>End-to-end non-technical loss (NTL) / power-theft detection prototype. An Arduino Uno with a potentiometer simulating a load transducer implements edge-based anomaly thresholding in C++ firmware, streaming live power/current readings over Serial at 115,200 baud at 5Hz.</p>
+      <ul>
+        <li>Python dashboard receives the serial stream via PySerial, maintains a rolling real-time plot (matplotlib animation), and switches to a CRITICAL red-alert state when a load spike exceeds the theft threshold.</li>
+        <li>Firmware handles thresholding directly on the microcontroller, reducing data volume sent to the host: embedded intelligence by design.</li>
+        <li>Companion project to Smart Meter Analytics: this one handles real-time edge alerting, the analytics repo handles historical batch analysis.</li>
+      </ul>`,
+    tags: ['Python', 'Arduino Uno', 'C++', 'PySerial', 'matplotlib'],
+    links: [{ label: 'GitHub', href: '#' }],
+  },
+  {
+    id: 'rgbled',
+    kicker: 'Personal Project · PCB Design',
+    title: 'USB RGB LED Controller PCB',
+    short: 'Full schematic-to-fabrication PCB design for triple-channel RGB control.',
+    body: `<p>Compact USB-C and Micro-USB powered RGB LED controller PCB, designed schematic-to-fabrication-ready Gerber files in EasyEDA Pro, exported to Altium Designer format for professional workflow compatibility.</p>
+      <ul>
+        <li>Triple MOSFET switching architecture (2N7002 N-Channel MOSFETs) gives independent PWM-capable control of red, green, and blue channels with no crosstalk.</li>
+        <li>Integrated LDO regulator steps the 5V USB supply down to a stable logic-level voltage, with 10uF decoupling capacitors at the regulator output and power rail to suppress ripple and transient noise.</li>
+        <li>Repository includes the full Altium schematic and layout files, a PDF schematic export, a complete BOM, and fabrication-ready Gerbers.</li>
+      </ul>`,
+    tags: ['EasyEDA Pro', 'Altium Designer', 'KiCad-compatible Gerbers'],
+    links: [{ label: 'GitHub', href: '#' }],
+  },
+  {
+    id: 'rfid',
+    kicker: 'Personal Project · Embedded Systems',
+    title: 'RFID Access Control System',
+    short: 'MFRC522-based access control with interrupt-driven gate logging.',
+    body: `<p>RFID-based physical access control system: an MFRC522 reader scans presented cards and compares UIDs against a hardcoded authorized list in firmware, granting or denying access.</p>
+      <ul>
+        <li>Access granted triggers a green LED sequence and a 90-degree servo rotation to open a gate; unauthorized cards trigger a red LED and buzzer, full multimodal feedback.</li>
+        <li>Interrupt-driven gate count logging tracks openings within each 5-minute interval, printing to Serial and auto-resetting at each boundary.</li>
+        <li>Full embedded stack: SPI between Arduino and MFRC522, servo PWM, GPIO for LEDs/buzzer, UART Serial logging, all in C++.</li>
+      </ul>`,
+    tags: ['C++', 'Arduino Uno', 'MFRC522', 'Servo Motor'],
+    links: [{ label: 'GitHub', href: '#' }],
+  },
+  {
+    id: 'carbon',
+    kicker: 'Portfolio Project · Enterprise / Full-Stack',
+    title: 'Carbon Emission & Sustainability Tracker',
+    short: 'Enterprise Odoo module for CSR and sustainability KPI tracking.',
+    body: `<p>Full-stack enterprise Odoo module for Corporate Social Responsibility and sustainability management, deployable within an existing Odoo ERP environment.</p>
+      <ul>
+        <li>Structured logging of CSR activities, KPI definitions, and environmental/social impact metrics across multiple projects and sites.</li>
+        <li>Automated KPI threshold alerting via cron-scheduled evaluation jobs, no manual intervention required.</li>
+        <li>Geospatial dashboard for map-based, site-level sustainability performance comparison across regions.</li>
+        <li>Supplier audit and compliance module with risk scoring, audit trail logging, and role-based access control via Odoo security rules.</li>
+      </ul>`,
+    tags: ['JavaScript', 'Python', 'Odoo Framework', 'PostgreSQL'],
+    links: [{ label: 'GitHub', href: '#' }],
+  },
+  {
+    id: 'retail',
+    kicker: 'Portfolio Project · Data Analytics',
+    title: 'Retail Operations Analytics',
+    short: 'SQL + Tableau analytics pipeline with interview-ready reasoning.',
+    body: `<p>End-to-end retail analytics pipeline on the Sample Superstore dataset (~10,000 rows of US retail orders, 2020-2023). Python ETL layer loads and cleans raw CSV into a normalized SQLite database.</p>
+      <ul>
+        <li>4 advanced SQL queries: regional profit margin analysis (GROUP BY/HAVING), month-over-month sales growth (LAG window functions), top products by margin (CTEs), and unprofitable repeat customers.</li>
+        <li>Tableau Public dashboard with map, time-series, and bar-chart views covering regional performance, sales trends, and product profitability.</li>
+        <li>README includes interview-ready talking points on the business reasoning behind each query.</li>
+      </ul>`,
+    tags: ['Python', 'pandas', 'SQLite', 'SQL Window Functions', 'Tableau Public'],
+    links: [{ label: 'GitHub', href: '#' }],
+  },
+  {
+    id: 'envdash',
+    kicker: 'Personal Project · APIs / Data Viz',
+    title: 'Global Environmental Intelligence Dashboard',
+    short: 'Async air-quality dashboard pulling live data for any location.',
+    body: `<p>Cloud-integrated air quality monitoring dashboard that asynchronously fetches multi-spectral gas concentration data from the OpenWeatherMap REST API for any queried location.</p>
+      <ul>
+        <li>Parses JSON payloads with AQI component readings (CO, NO2, O3, PM2.5, PM10), visualized as labeled bar charts with WHO guideline threshold lines.</li>
+        <li>Asynchronous HTTP architecture (aiohttp) allows multiple location queries to be fetched concurrently, non-blocking.</li>
+      </ul>`,
+    tags: ['Python', 'OpenWeatherMap API', 'aiohttp', 'matplotlib'],
+    links: [{ label: 'GitHub', href: '#' }],
+  },
+  {
+    id: 'watersensor',
+    kicker: 'Personal Project · IoT / Embedded',
+    title: 'Water Sensor: Soil Moisture Monitor',
+    short: 'Calibrated analog soil-moisture monitor on Arduino.',
+    body: `<p>Arduino-based soil moisture monitoring system: a capacitive soil moisture sensor outputs a raw ADC voltage proportional to humidity, read on an analog pin at 1Hz.</p>
+      <ul>
+        <li>Calibration routine uses map() and constrain() to convert raw ADC values against known wet/dry references into a normalized 0-100% humidity reading, correcting for sensor non-linearity.</li>
+        <li>Readings printed to Serial every second for real-time monitoring and logging via the Arduino IDE serial plotter.</li>
+      </ul>`,
+    tags: ['C++', 'Arduino Uno', 'Analog ADC'],
+    links: [{ label: 'GitHub', href: '#' }],
   },
 ]
 
-export const publications = [
+export const projectMap: Record<string, Project> = Object.fromEntries(projects.map(p => [p.id, p]))
+
+export const SPOTLIGHT_IDS = ['synapse', 'deriv', 'lumen']
+
+export const ARCHIVE_GROUPS: { label: string; ids: string[] }[] = [
+  { label: 'AI & Full-Stack', ids: ['paperchat', 'pitch', 'audit'] },
+  { label: 'Data Engineering & Analytics', ids: ['smartmeter', 'retail', 'carbon', 'envdash'] },
+  { label: 'Embedded & Hardware', ids: ['syncrow', 'theft', 'smartbin', 'handsfree', 'watersensor', 'rfid', 'rgbled'] },
+]
+
+export const HARDWARE_LENS_IDS = ['synapse', 'powerquality', 'smartbin', 'syncrow']
+export const SOFTWARE_LENS_IDS = ['synapse', 'deriv', 'lumen', 'paperchat']
+
+export const CHANNEL_ICONS: Record<string, string> = {
+  synapse: '<rect x="7" y="7" width="10" height="10" rx="1"/><path d="M7 10H3M7 14H3M17 10h4M17 14h4M10 7V3M14 7V3M10 21v-4M14 21v-4"/>',
+  deriv: '<polyline points="3,17 9,11 13,15 21,5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="15,5 21,5 21,11" stroke-linecap="round" stroke-linejoin="round"/>',
+  lumen: '<circle cx="12" cy="4.5" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M12 6.5L6.3 16.4M12 6.5l5.7 9.9M7.5 18h9"/>',
+}
+
+export const skillsData = [
+  { cat: 'AI / ML', items: 'Python · LangChain · CrewAI · RAG · XGBoost · scikit-learn · Prompt Engineering · fastembed / ONNX' },
+  { cat: 'Full-Stack', items: 'Next.js · TypeScript · React · Supabase · FastAPI · REST / SSE' },
+  { cat: 'Hardware', items: 'FPGA (Vitis HLS, Vivado, Zynq-7020) · Arduino · PCB Design · I2C / SPI / UART' },
+  { cat: 'Data', items: 'PySpark · pandas · SQL (window functions) · Tableau · NumPy / FFT' },
+  { cat: 'IoT', items: 'MQTT · ZigBee · Tuya Platform · Device Validation' },
+]
+
+export const educationRows = [
   {
-    badge: 'IEEE ITEC-AP 2025',
-    title: 'Smart EV Charging Frameworks: Grid Integration and Demand-Side Optimization',
-    venue: 'International Transportation Electrification Conference -- Asia Pacific',
-    accent: 'purple',
+    status: 'IN PROGRESS',
+    statusClass: 'rev',
+    venue: 'Heriot-Watt Univ. Dubai',
+    title: 'MSc Artificial Intelligence',
+    note: 'starting Sep 2026',
+    badge: '🎓 Duffin Family Future Shapers Scholarship',
   },
   {
-    badge: 'IEEE ICTMOD 2024',
-    title: 'Microprocessor and ML Integration: Embedded AI Pipeline Design for Edge Applications',
-    venue: 'International Conference on Technology and Management of Operations & Decisions',
-    accent: 'blue',
+    status: 'COMPLETED',
+    statusClass: 'pub',
+    venue: 'American Univ. in Dubai',
+    title: 'BSc Electrical Engineering',
+    note: 'graduated May 2026',
+    badge: '',
   },
 ]
 
-export const skills = [
-  { category: 'AI & ML', items: ['Python', 'CrewAI', 'LangChain', 'Gemini API', 'Groq', 'OpenAI', 'TensorFlow/Keras', 'XGBoost', 'Prompt Engineering', 'RAG', 'fastembed', 'ONNX Runtime'] },
-  { category: 'Data', items: ['SQL (CTEs, Window Functions)', 'pandas', 'NumPy', 'Tableau', 'ETL Pipelines', 'SQLite', 'matplotlib/seaborn'] },
-  { category: 'Full Stack', items: ['Next.js', 'TypeScript', 'React', 'Supabase', 'PostgreSQL', 'REST APIs', 'SSE', 'Vercel', 'FastAPI', 'Render', 'Streamlit'] },
-  { category: 'Hardware', items: ['FPGA (Zynq-7020, Vitis HLS, Vivado)', 'Arduino', 'Raspberry Pi', 'ESP32', 'MQTT', 'ZigBee', 'PCB Design (EasyEDA)'] },
-  { category: 'DevOps', items: ['Git', 'GitHub', 'Vercel', 'Docker (basic)', 'GitHub Actions'] },
-]
-
-export const experience = [
-  {
-    role: 'Hardware R&D Intern',
-    company: 'Syncrow IoT',
-    period: 'May 2025 – Sep 2025',
-    hours: '~422 hrs',
-    bullets: [
-      'Conducted structured hardware validation and functional testing of 15+ IoT devices including smart door locks, smart ACs, energy clamps, radar sensors, and multi-mode gateways',
-      'Designed a standardized 17-step IoT device testing procedure covering power-up, protocol handshake, latency, edge case handling, and stress testing',
-      'Worked with embedded communication protocols including MQTT, ZigBee, and wired/wireless IoT architectures',
-      'Built a structured device catalogue documenting technical specifications, measurement accuracy, and reliability ratings for 30+ devices',
-      'Authored validation requirements documentation working cross-functionally with the product owner and data scientist',
-    ],
-  },
+export const publicationsRows = [
+  { status: 'PUBLISHED', statusClass: 'pub', venue: 'IEEE ITEC-AP 2025', title: 'Smart EV Charging Frameworks: Grid Integration and Demand-Side Optimization' },
+  { status: 'PUBLISHED', statusClass: 'pub', venue: 'IEEE ICTMOD 2024', title: 'Microprocessor and ML Integration: Embedded AI Pipeline Design for Edge Applications' },
+  { status: 'UNDER REVIEW', statusClass: 'rev', venue: 'IEEE (submitted)', title: 'FPGA-Accelerated Edge AI for Clinical Decision Support: Architecture, Implementation and Performance Analysis' },
 ]

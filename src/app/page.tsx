@@ -88,7 +88,7 @@ export default function Home() {
         </div>
 
         <Reveal>
-        <div className="kicker" id="sec-projects">Selected Work</div>
+        <div className="kicker kicker-first" id="sec-projects">Selected Work</div>
         <h2>Spotlight</h2>
         <div className="subhead">
           The strongest, most complete builds. Everything below has its own link too, so nothing here is ever really hidden from a direct CV reference.

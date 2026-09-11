@@ -400,8 +400,8 @@ export const educationRows = [
   },
 ]
 
-export const publicationsRows = [
-  { status: 'PUBLISHED', statusClass: 'pub', venue: 'IEEE ITEC-AP 2025', title: 'Smart EV Charging Frameworks: Grid Integration and Demand-Side Optimization' },
-  { status: 'PUBLISHED', statusClass: 'pub', venue: 'IEEE ICTMOD 2024', title: 'Microprocessor and ML Integration: Embedded AI Pipeline Design for Edge Applications' },
+export const publicationsRows: { status: string; statusClass: string; venue: string; title: string; href?: string }[] = [
+  { status: 'PUBLISHED', statusClass: 'pub', venue: 'IEEE ITEC-AP 2025', title: 'Smart EV Charging Frameworks: Grid Integration and Demand-Side Optimization', href: 'https://ieeexplore.ieee.org/abstract/document/11344871' },
+  { status: 'PUBLISHED', statusClass: 'pub', venue: 'IEEE ICTMOD 2024', title: 'Leveraging Machine Learning for Sustainable Microprocessor Utilization', href: 'https://ieeexplore.ieee.org/document/10878151/' },
   { status: 'UNDER REVIEW', statusClass: 'rev', venue: 'IEEE (submitted)', title: 'FPGA-Accelerated Edge AI for Clinical Decision Support: Architecture, Implementation and Performance Analysis' },
 ]

@@ -184,7 +184,14 @@ export default function Home() {
             <div className="prow" key={row.title}>
               <span className={`status ${row.statusClass}`}>{row.status}</span>
               <span className="venue">{row.venue}</span>
-              <span className="ptitle">{row.title}</span>
+              {row.href ? (
+                <a className="ptitle publink" href={row.href} target="_blank" rel="noopener noreferrer">
+                  {row.title}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M7 17 17 7M9 7h8v8" /></svg>
+                </a>
+              ) : (
+                <span className="ptitle">{row.title}</span>
+              )}
             </div>
           ))}
         </div>

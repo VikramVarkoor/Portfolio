@@ -92,6 +92,10 @@ a { color: inherit; }
 .publog .status.rev { color: #d4af37; border: 1px solid #d4af3755; background: rgba(212,175,55,0.06); }
 .publog .venue { color: #7ed9a3aa; }
 .publog .ptitle { color: #d8f5e3; }
+.publog a.ptitle.publink { text-decoration: none; display: inline-flex; align-items: center; gap: 7px; transition: color 0.15s; }
+.publog a.ptitle.publink:hover { color: #4dff9e; }
+.publog a.ptitle.publink svg { width: 12px; height: 12px; opacity: 0.6; flex-shrink: 0; transition: transform 0.2s, opacity 0.2s; }
+.publog a.ptitle.publink:hover svg { opacity: 1; transform: translate(1px, -1px); }
 @media (max-width: 900px) {
   .publog .prow { grid-template-columns: 1fr; gap: 6px; }
 }

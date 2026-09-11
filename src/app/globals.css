@@ -121,6 +121,17 @@ a { color: inherit; }
 .modal-box .linkrow { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
 .modal-box .linkrow a { font-size: 13px; color: #dfe4ee; text-decoration: none; border: 1px solid #333; padding: 8px 16px; border-radius: 20px; }
 .modal-box .linkrow a:hover { border-color: #d4af37; color: #d4af37; }
+/* Deep-dive modals are themed per lens so they read as a distinct, deeper
+   tier from the neutral "full breakdown" modal, not just more of the same. */
+.modal-box.deepdive.dd-hw { border-top-color: #d4af37; background: #0c1310; font-family: Georgia, 'Times New Roman', serif; }
+.modal-box.deepdive.dd-hw h2 { color: #f0cf6e; }
+.modal-box.deepdive.dd-hw .mkicker { color: #d4af37; }
+.modal-box.deepdive.dd-hw li::marker { color: #d4af37; }
+.modal-box.deepdive.dd-sw { border-top-color: #5b8dff; background: #0a0e14; font-family: 'SF Mono', 'Courier New', monospace; }
+.modal-box.deepdive.dd-sw h2 { color: #8fb0ff; font-size: 22px; }
+.modal-box.deepdive.dd-sw .mkicker { color: #5b8dff; }
+.modal-box.deepdive.dd-sw p, .modal-box.deepdive.dd-sw li { font-size: 13px; }
+.modal-box.deepdive.dd-sw li::marker { color: #5b8dff; }
 
 /* ===== LENS PAGES shared ===== */
 .lens-page { min-height: 100vh; padding: 70px 60px; position: relative; overflow: hidden; }
@@ -145,12 +156,29 @@ a { color: inherit; }
 .specrow h3 { font-size: 21px; margin-bottom: 10px; font-weight: 400; }
 .specrow p { font-size: 15px; line-height: 1.75; color: #c3e0d0; max-width: 600px; }
 .specrow p + p { margin-top: 10px; }
+/* Register-index bullets: a boxed two-digit tag instead of a dot, in
+   keeping with the datasheet/spec-sheet register-address language already
+   used for the "U01 · FPGA" tags. */
+.spec-bullets { list-style: none; counter-reset: specnum; margin: 16px 0 4px; max-width: 600px; }
+.spec-bullets li { counter-increment: specnum; position: relative; padding-left: 40px; font-size: 14px; line-height: 1.65; color: #c3e0d0; margin-bottom: 12px; }
+.spec-bullets li::before {
+  content: counter(specnum, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.05em;
+  font-family: 'Courier New', monospace; font-size: 10.5px; color: #d4af37;
+  border: 1px solid #d4af3766; background: rgba(212,175,55,0.07);
+  padding: 2px 5px; border-radius: 3px; line-height: 1.4;
+}
 .specrow .specs { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; font-family: 'Courier New', monospace; }
 .specrow .specs span { font-size: 12.5px; color: #d4af37; border: 1px solid #d4af3766; background: rgba(212,175,55,0.08); padding: 7px 16px; border-radius: 3px; }
-.specrow .fulllink { margin-top: 16px; display: inline-flex; align-items: center; gap: 6px; font-family: 'Courier New', monospace; font-size: 12px; letter-spacing: 0.5px; color: #d4af37; background: none; border: none; border-bottom: 1px solid #d4af3766; padding: 2px 0; cursor: pointer; }
+.specrow .linkrow-lens { margin-top: 16px; display: flex; gap: 22px; flex-wrap: wrap; }
+.specrow .fulllink { display: inline-flex; align-items: center; gap: 6px; font-family: 'Courier New', monospace; font-size: 12px; letter-spacing: 0.5px; color: #d4af37; background: none; border: none; border-bottom: 1px solid #d4af3766; padding: 2px 0; cursor: pointer; }
 .specrow .fulllink:hover { border-bottom-color: #d4af37; color: #f0cf6e; }
 .specrow .fulllink svg { width: 12px; height: 12px; transition: transform 0.2s; }
 .specrow .fulllink:hover svg { transform: translateX(3px); }
+.specrow .deeplink { display: inline-flex; align-items: center; gap: 6px; font-family: 'Courier New', monospace; font-size: 12px; letter-spacing: 0.5px; color: #06120c; background: #d4af37; border: none; padding: 6px 12px; border-radius: 3px; cursor: pointer; }
+.specrow .deeplink:hover { background: #f0cf6e; }
+.specrow .deeplink svg { width: 12px; height: 12px; transition: transform 0.2s; }
+.specrow .deeplink:hover svg { transform: translateX(3px); }
 #hardware .gearwrap { position: fixed; top: 50%; width: 320px; height: 320px; opacity: 0.28; z-index: 1; transform: translateY(-50%); pointer-events: none; }
 /* Center the 320px gear rig within the empty margin beside the 700px
    centered column: margin width is (100vw - 700px)/2, so half of that
@@ -212,10 +240,73 @@ a { color: inherit; }
 .notfound a { display: inline-block; margin-top: 30px; font-size: 13px; color: #9fffc4; border: 1px solid #2f5f43; padding: 11px 22px; border-radius: 30px; text-decoration: none; transition: all 0.2s; }
 .notfound a:hover { border-color: #4dff9e; box-shadow: 0 0 18px rgba(77,255,158,0.25); }
 
+/* ===== stat strip ===== */
+.home-hero .stat-strip { margin-top: 30px; display: flex; gap: 34px; flex-wrap: wrap; position: relative; z-index: 3; opacity: 0; animation: fadeUp 0.7s ease 1.7s forwards; }
+.home-hero .stat { display: flex; flex-direction: column; gap: 3px; min-width: 120px; }
+.home-hero .stat-n { font-size: 26px; font-weight: 700; color: #4dff9e; font-family: 'Courier New', monospace; line-height: 1; }
+.home-hero .stat-l { font-size: 11px; color: #7ed9a3; opacity: 0.75; max-width: 160px; line-height: 1.4; }
+
+.home-hero .status-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #4dff9e; margin-right: 7px; box-shadow: 0 0 8px #4dff9e; animation: dotpulse 2s ease-in-out infinite; }
+@keyframes dotpulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.45; transform: scale(0.8); } }
+
+@media (max-width: 640px) {
+  .home-hero .stat-strip { gap: 22px; }
+  .home-hero .stat { min-width: 42%; }
+}
+
+/* ===== scroll reveal ===== */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal-in { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ===== typing terminal caret ===== */
+.term-caret { display: inline-block; width: 6px; height: 12px; margin-left: 2px; background: #4dff9e; vertical-align: -1px; animation: cursorblink 1s step-end infinite; }
+
+/* ===== command palette ===== */
+.palette-hint {
+  position: fixed; bottom: 22px; right: 22px; z-index: 200;
+  display: flex; gap: 4px; align-items: center;
+  background: rgba(10,14,12,0.85); border: 1px solid #2c3230; border-radius: 8px;
+  padding: 8px 10px; cursor: pointer; backdrop-filter: blur(6px);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.palette-hint:hover { border-color: #4dff9e77; box-shadow: 0 0 16px rgba(77,255,158,0.2); }
+.palette-hint kbd {
+  font-family: 'Courier New', monospace; font-size: 11px; color: #baffc9;
+  background: rgba(77,255,158,0.08); border: 1px solid #2c3230; border-radius: 4px; padding: 2px 6px;
+}
+.palette-overlay {
+  position: fixed; inset: 0; z-index: 300; background: rgba(4,6,5,0.72); backdrop-filter: blur(3px);
+  display: flex; align-items: flex-start; justify-content: center; padding-top: 12vh;
+}
+.palette-box {
+  width: min(560px, 92vw); max-height: 60vh; display: flex; flex-direction: column;
+  background: #0b0f0d; border: 1px solid #2c3230; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5); font-family: 'Courier New', monospace;
+  animation: fadeUpFull 0.16s ease;
+}
+.palette-inputrow { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid #1c211f; }
+.palette-caret { color: #4dff9e; font-size: 15px; }
+.palette-inputrow input { flex: 1; background: none; border: none; outline: none; color: #e8ede9; font-size: 14.5px; font-family: inherit; }
+.palette-inputrow input::placeholder { color: #5c655f; }
+.palette-inputrow kbd { font-size: 10px; color: #7ed9a3; border: 1px solid #2c3230; border-radius: 4px; padding: 2px 6px; }
+.palette-list { overflow-y: auto; padding: 8px; }
+.palette-group { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #d4af37; padding: 10px 10px 4px; }
+.palette-item {
+  width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  background: none; border: none; color: #d8ded9; text-align: left; padding: 10px 10px; border-radius: 7px;
+  font-family: inherit; font-size: 13.5px; cursor: pointer;
+}
+.palette-item.active, .palette-item:hover { background: rgba(77,255,158,0.1); color: #baffc9; }
+.palette-tag { font-size: 10.5px; color: #6b7685; white-space: nowrap; }
+.palette-empty { padding: 24px 10px; color: #6b7685; font-size: 13px; text-align: center; }
+
 /* ===== print ===== */
 @media print {
   .home-hero nav, .subnav, .wipe, .modal-overlay, .lens-nav button.back,
-  .channel-row .arrow, .fulllink, .codelink, .terminal, button {
+  .channel-row .arrow, .fulllink, .codelink, .terminal, button, .palette-hint {
     display: none !important;
   }
   body, .home-hero, .home-body, #hardware, #software {

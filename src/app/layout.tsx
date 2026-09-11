@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Analytics } from '@vercel/analytics/react'
 import WipeProvider from './components/WipeProvider'
+import CommandPalette from './components/CommandPalette'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://vikram-varkoor.vercel.app'),
@@ -23,7 +24,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body>
-        <WipeProvider>{children}</WipeProvider>
+        <WipeProvider>
+          {children}
+          <CommandPalette />
+        </WipeProvider>
         <Analytics />
       </body>
     </html>

@@ -2,16 +2,11 @@
 
 import { useState } from 'react'
 import ProjectModal from '../components/ProjectModal'
+import LensDeepDive from '../components/LensDeepDive'
+import TypingTerminal from '../components/TypingTerminal'
 import { useWipe } from '../components/WipeProvider'
 import { projectMap, SOFTWARE_LENS_IDS } from '../data'
 import { trackProjectOpen, trackModeSwitch } from '../lib/analytics'
-
-const SUMMARY_LINES: Record<string, string[]> = {
-  synapse: ['Clinical dashboard: 3D MRI viewer, Grad-CAM,', 'SHAP attribution over the FPGA pipeline.'],
-  deriv: ['61-test suite, TDD component, caught a real', 'data-leakage bug before it shipped.'],
-  lumen: ['Parallel multi-model queries, judge agent,', 'SSE streaming. Production on Vercel.'],
-  paperchat: ['fastembed + NumPy RAG stack running under', '80MB RAM on a free-tier backend.'],
-}
 
 function CodeLine({ n, children }: { n: string; children: React.ReactNode }) {
   return <>
@@ -22,6 +17,7 @@ function CodeLine({ n, children }: { n: string; children: React.ReactNode }) {
 export default function SoftwarePage() {
   const { wipeNavigate } = useWipe()
   const [openId, setOpenId] = useState<string | null>(null)
+  const [deepId, setDeepId] = useState<string | null>(null)
 
   let lineNo = 1
   const nextLine = () => String(lineNo++).padStart(2, '0')
@@ -66,14 +62,14 @@ export default function SoftwarePage() {
           {SOFTWARE_LENS_IDS.map((id, idx) => {
             const p = projectMap[id]
             const stack = p.tags.slice(0, 3)
-            const summary = SUMMARY_LINES[id] || ['', '']
+            const bullets = p.swBullets || []
             const isLast = idx === SOFTWARE_LENS_IDS.length - 1
             return (
               <span key={id}>
-                <CodeLine n={nextLine()}>{'  '}<span className="punc">{'{'}</span></CodeLine>
-                <CodeLine n={nextLine()}>{'    '}<span className="prop">name</span><span className="punc">:</span> <span className="str">&quot;{p.title}&quot;</span><span className="punc">,</span></CodeLine>
+                <CodeLine n={nextLine()}>{'  '}<span className="punc">{'{'}</span></CodeLine>
+                <CodeLine n={nextLine()}>{'    '}<span className="prop">name</span><span className="punc">:</span> <span className="str">&quot;{p.title}&quot;</span><span className="punc">,</span></CodeLine>
                 <CodeLine n={nextLine()}>
-                  {'    '}<span className="prop">stack</span><span className="punc">:</span> <span className="punc">[</span>
+                  {'    '}<span className="prop">stack</span><span className="punc">:</span> <span className="punc">[</span>
                   {stack.map((t, i) => (
                     <span key={t}>
                       <span className="str">&quot;{t}&quot;</span>{i < stack.length - 1 ? <span className="punc">, </span> : null}
@@ -81,10 +77,15 @@ export default function SoftwarePage() {
                   ))}
                   <span className="punc">],</span>
                 </CodeLine>
-                <CodeLine n={nextLine()}>{'    '}<span className="prop">summary</span><span className="punc">:</span> <span className="str">&quot;{summary[0]}</span></CodeLine>
-                <CodeLine n={nextLine()}>{'      '}<span className="str">{summary[1]}&quot;</span></CodeLine>
+                <CodeLine n={nextLine()}>{'    '}<span className="prop">summary</span><span className="punc">:</span> <span className="punc">[</span></CodeLine>
+                {bullets.map((b, i) => (
+                  <CodeLine key={i} n={nextLine()}>
+                    {'      '}<span className="str">&quot;{b}&quot;</span><span className="punc">,</span>
+                  </CodeLine>
+                ))}
+                <CodeLine n={nextLine()}>{'    '}<span className="punc">],</span></CodeLine>
                 <CodeLine n={nextLine()}>
-                  {'  '}<span className="punc">{isLast ? '}' : '},'}</span>{' '}
+                  {'  '}<span className="punc">{isLast ? '}' : '},'}</span>{' '}
                   <span className="com">
                     <button className="codelink" onClick={() => { trackProjectOpen(id, 'software'); setOpenId(id) }}>
                       {'// full breakdown '}
@@ -92,6 +93,17 @@ export default function SoftwarePage() {
                     </button>
                   </span>
                 </CodeLine>
+                {p.swDeepDive && (
+                  <CodeLine n={nextLine()}>
+                    {'  '}
+                    <span className="com">
+                      <button className="codelink" onClick={() => { trackProjectOpen(id, 'software'); setDeepId(id) }}>
+                        {'// software deep-dive '}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                      </button>
+                    </span>
+                  </CodeLine>
+                )}
               </span>
             )
           })}
@@ -104,17 +116,28 @@ export default function SoftwarePage() {
           <div className="dot r" /><div className="dot y" /><div className="dot g" />
           <div className="filename">zsh - deploy</div>
         </div>
-        <div className="body">
-          <div><span className="prompt">$</span> npm run build</div>
-          <div className="out">✓ Compiled successfully in 4.2s</div>
-          <div className="out">✓ Type-check passed</div>
-          <div><span className="prompt">$</span> vercel --prod</div>
-          <div className="ok">✓ Deployed to production</div>
-        </div>
+        <TypingTerminal
+          lines={[
+            { prefix: '$ ', text: 'npm run build' },
+            { text: '✓ Compiled successfully in 4.2s', cls: 'out' },
+            { text: '✓ Type-check passed', cls: 'out' },
+            { prefix: '$ ', text: 'vercel --prod' },
+            { text: '✓ Deployed to production', cls: 'ok' },
+          ]}
+        />
       </div>
       </div>
 
       <ProjectModal projectId={openId} onClose={() => setOpenId(null)} />
+      {deepId && projectMap[deepId]?.swDeepDive && (
+        <LensDeepDive
+          kicker="Software Lens"
+          title={projectMap[deepId].title}
+          bodyHtml={projectMap[deepId].swDeepDive as string}
+          theme="software"
+          onClose={() => setDeepId(null)}
+        />
+      )}
     </div>
   )
 }

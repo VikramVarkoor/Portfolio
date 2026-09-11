@@ -1,12 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import HeroWave from './components/HeroWave'
 import TypewriterName from './components/TypewriterName'
 import ProjectModal from './components/ProjectModal'
+import Reveal from './components/Reveal'
 import { useWipe } from './components/WipeProvider'
 import { trackProjectOpen, trackCvDownload, trackModeSwitch } from './lib/analytics'
 import {
+  projects,
   projectMap,
   SPOTLIGHT_IDS,
   ARCHIVE_GROUPS,
@@ -18,9 +20,41 @@ import {
 
 const LAST_UPDATED = 'September 2026'
 
+const PUBLISHED_COUNT = publicationsRows.filter(r => r.statusClass === 'pub').length
+const UNDER_REVIEW_COUNT = publicationsRows.length - PUBLISHED_COUNT
+
+const STATS = [
+  { n: String(projects.length), label: 'Projects shipped' },
+  { n: String(PUBLISHED_COUNT), label: `IEEE papers published${UNDER_REVIEW_COUNT ? ` (${UNDER_REVIEW_COUNT} under review)` : ''}` },
+  { n: '422', label: 'Hours of hardware R&D at Syncrow IoT' },
+  { n: '15+', label: 'IoT device types validated' },
+]
+
 export default function Home() {
   const { wipeNavigate } = useWipe()
   const [openId, setOpenId] = useState<string | null>(null)
+
+  useEffect(() => {
+    function checkPendingProject() {
+      const id = sessionStorage.getItem('paletteOpenProject')
+      if (id && projectMap[id]) {
+        setOpenId(id)
+        sessionStorage.removeItem('paletteOpenProject')
+      }
+    }
+    checkPendingProject()
+    window.addEventListener('palette-open-project', checkPendingProject)
+
+    const scrollTo = sessionStorage.getItem('paletteScrollTo')
+    if (scrollTo) {
+      sessionStorage.removeItem('paletteScrollTo')
+      const t = setTimeout(() => {
+        document.getElementById(scrollTo)?.scrollIntoView({ behavior: 'smooth' })
+      }, 350)
+      return () => { clearTimeout(t); window.removeEventListener('palette-open-project', checkPendingProject) }
+    }
+    return () => window.removeEventListener('palette-open-project', checkPendingProject)
+  }, [])
 
   return (
     <div id="home-page">
@@ -49,6 +83,17 @@ export default function Home() {
         <div className="sub">
           FPGA-accelerated systems &amp; applied AI. Two IEEE papers. Currently shipping at the intersection of embedded hardware and machine learning.
         </div>
+        <div className="status-line">
+          <span className="status-dot" /> Currently: MSc AI @ Heriot-Watt Dubai, starting Sept 2026 · Open to full-time roles
+        </div>
+        <div className="stat-strip">
+          {STATS.map(s => (
+            <div className="stat" key={s.label}>
+              <span className="stat-n">{s.n}</span>
+              <span className="stat-l">{s.label}</span>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="home-body">
@@ -61,6 +106,7 @@ export default function Home() {
           <a href="#sec-publications">Publications</a>
         </div>
 
+        <Reveal>
         <div className="kicker" id="sec-projects">Selected Work</div>
         <h2>Spotlight</h2>
         <div className="subhead">
@@ -92,7 +138,9 @@ export default function Home() {
             )
           })}
         </div>
+        </Reveal>
 
+        <Reveal>
         <div className="kicker" id="sec-archive">More Builds</div>
         <h2 style={{ marginBottom: 24 }}>Full Archive</h2>
         <div className="dirlisting">
@@ -116,7 +164,9 @@ export default function Home() {
             </div>
           ))}
         </div>
+        </Reveal>
 
+        <Reveal>
         <div className="kicker" id="sec-skills">Stack</div>
         <h2 style={{ marginBottom: 24 }}>Skills</h2>
         <div className="skillsblock">
@@ -128,7 +178,9 @@ export default function Home() {
             </div>
           ))}
         </div>
+        </Reveal>
 
+        <Reveal>
         <div className="kicker" id="sec-education">Background</div>
         <h2 style={{ marginBottom: 24 }}>Education</h2>
         <div className="publog edulog">
@@ -141,7 +193,9 @@ export default function Home() {
             </div>
           ))}
         </div>
+        </Reveal>
 
+        <Reveal>
         <div className="kicker" id="sec-publications">Research</div>
         <h2 style={{ marginBottom: 24 }}>Publications</h2>
         <div className="publog">
@@ -153,6 +207,7 @@ export default function Home() {
             </div>
           ))}
         </div>
+        </Reveal>
 
         <div className="footer-line">Last updated {LAST_UPDATED}</div>
       </section>

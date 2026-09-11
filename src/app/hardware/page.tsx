@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Gears from '../components/Gears'
 import ProjectModal from '../components/ProjectModal'
+import LensDeepDive from '../components/LensDeepDive'
 import { useWipe } from '../components/WipeProvider'
 import { projectMap, HARDWARE_LENS_IDS } from '../data'
 import { trackProjectOpen, trackModeSwitch } from '../lib/analytics'
@@ -14,20 +15,10 @@ const SPEC_TAGS: Record<string, string> = {
   syncrow: 'U04 · FIELD WORK',
 }
 
-const SPEC_SUMMARY: Record<string, string> = {
-  synapse:
-    'The hardware half: Vitis HLS kernels handle MRI feature-extraction directly in programmable logic on a Zynq-7020, which is what gets inference down to 17 seconds on a $269 board instead of a $3,000-10,000 GPU-equivalent setup. Vivado handled timing closure across the fabric, 100MHz clock (10.95ns actual vs. 15ns constraint) at 13% LUT / 22% DSP utilization, the part that decides whether a design survives contact with silicon.',
-  powerquality:
-    'Arduino-side signal acquisition feeding real-time FFT analysis, catching harmonic distortion and fault conditions as they happen, no cloud round-trip between the signal and the answer.',
-  smartbin:
-    'A MobileNet CNN fine-tuned to 97% Top-1 accuracy drives GPIO-controlled stepper and servo motors, closing the loop between camera inference and physical actuation, all running locally on a Raspberry Pi with no cloud dependency.',
-  syncrow:
-    '422 hours validating 15+ IoT device types against a 17-step testing procedure I designed, power-up through stress testing, across MQTT and ZigBee comms.',
-}
-
 export default function HardwarePage() {
   const { wipeNavigate } = useWipe()
   const [openId, setOpenId] = useState<string | null>(null)
+  const [deepId, setDeepId] = useState<string | null>(null)
 
   return (
     <div id="hardware" className="lens-page">
@@ -53,22 +44,43 @@ export default function HardwarePage() {
                 <div className="corner r" />
                 <div className="tag">{SPEC_TAGS[id]}</div>
                 <h3>{p.title}</h3>
-                <p>{SPEC_SUMMARY[id]}</p>
+                <ul className="spec-bullets">
+                  {(p.hwBullets || []).map((b, i) => <li key={i}>{b}</li>)}
+                </ul>
                 <div className="specs">
                   {p.tags.slice(0, 3).map(t => <span key={t}>{t}</span>)}
                 </div>
-                <button className="fulllink" onClick={() => { trackProjectOpen(id, 'hardware'); setOpenId(id) }}>
-                  full breakdown
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                    <path d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </button>
+                <div className="linkrow-lens">
+                  <button className="fulllink" onClick={() => { trackProjectOpen(id, 'hardware'); setOpenId(id) }}>
+                    full breakdown
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                      <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
+                  </button>
+                  {p.hwDeepDive && (
+                    <button className="deeplink" onClick={() => { trackProjectOpen(id, 'hardware'); setDeepId(id) }}>
+                      hardware deep-dive
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                        <path d="M5 12h14M13 6l6 6-6 6" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
               </div>
             )
           })}
         </div>
       </div>
       <ProjectModal projectId={openId} onClose={() => setOpenId(null)} />
+      {deepId && projectMap[deepId]?.hwDeepDive && (
+        <LensDeepDive
+          kicker={SPEC_TAGS[deepId]}
+          title={projectMap[deepId].title}
+          bodyHtml={projectMap[deepId].hwDeepDive as string}
+          theme="hardware"
+          onClose={() => setDeepId(null)}
+        />
+      )}
     </div>
   )
 }

@@ -12,6 +12,14 @@ export interface Project {
   tags: string[]
   links: ProjectLink[]
   lenses?: ('hardware' | 'software')[]
+  // Lens-specific cuts of this project: a short bullet list for the inline
+  // spec-sheet/editor summary, and a longer deep-dive shown behind its own
+  // "breakdown" link, so the hardware and software pages each surface the
+  // facts relevant to that angle instead of one shared paragraph.
+  hwBullets?: string[]
+  hwDeepDive?: string
+  swBullets?: string[]
+  swDeepDive?: string
 }
 
 export const projects: Project[] = [
@@ -31,6 +39,33 @@ export const projects: Project[] = [
     tags: ['Vitis HLS', 'Vivado', 'Zynq-7020', 'XGBoost', 'Optuna', 'Next.js 16', 'TypeScript', 'Tailwind CSS v4'],
     links: [{ label: 'Demo ▶', href: '#' }],
     lenses: ['hardware', 'software'],
+    hwBullets: [
+      'Vitis HLS 2022.1 kernel synthesized to RTL and mapped onto the Zynq-7020 fabric via Vivado.',
+      '100MHz clock domain: 10.95ns actual critical path against a 15ns timing constraint.',
+      "13% LUT / 22% DSP block utilization on the PYNQ-Z2's programmable logic.",
+      'ARM Cortex-A9 to FPGA bridge over AXI4-Stream DMA on shared DDR, zero-overhead handoff.',
+      '1.32s bilateral GLCM feature extraction running entirely in hardware.',
+    ],
+    hwDeepDive: `<p>The hardware brief here was inference speed on commodity silicon: get an MRI scan to a diagnosis fast enough to be clinically useful, on a board that costs less than a night in the hospital it's meant to serve. Vitis HLS let the GLCM feature-extraction pipeline get written in C++ with pipeline directives rather than hand-rolled RTL, then get synthesized down onto the Zynq-7020's programmable logic through Vivado.</p>
+      <ul>
+        <li>The extraction pipeline itself: an 8-block (2x2x2) decomposition of the hippocampal ROI, computing a local 3D Grey-Level Co-occurrence Matrix per block, pulling 252 Haralick texture features per scan across 13 spatial directions at 3 voxel distances.</li>
+        <li>Timing closure landed at 100MHz with a 10.95ns actual path against a 15ns constraint, at 13% LUT and 22% DSP utilization, comfortable headroom on a board with this little silicon to spare.</li>
+        <li>The ARM Cortex-A9 talks to the FPGA fabric over AXI4-Stream DMA on shared DDR memory, so the ARM core stays fully available for the ML classifier and dashboard logic while the FPGA is mid-extraction, rather than blocking on it.</li>
+        <li>End to end: 1.32s of that pipeline runs in hardware, contributing to a 17-second total inference time on a $269 PYNQ-Z2 board, versus $3,000-10,000 for a GPU-equivalent setup.</li>
+      </ul>`,
+    swBullets: [
+      'Full-stack clinical dashboard built in Next.js 16.1, React 19, and TypeScript.',
+      'Interactive 3D MRI viewer with Grad-CAM heatmap overlays and SHAP-style attribution.',
+      'FPGA vs. CPU benchmark analytics alongside a longitudinal case timeline.',
+      'One-click PDF report export for clinical use.',
+    ],
+    swDeepDive: `<p>The application layer's job is turning what the FPGA and the classifier produce into something a clinician can actually read. The three-task cascade ML classifier (XGBoost tuned with Optuna) runs AD vs. CN, CN vs. MCI, and Stable vs. Converting MCI, fusing the GLCM features with CSF biomarkers and clinical metadata, achieving AUC 0.903 / 0.803 / 0.779 respectively across 3,436 ADNI scans.</p>
+      <ul>
+        <li>The dashboard renders that output as an interactive 3D MRI viewer with Grad-CAM heatmap overlays showing where the model is actually looking, plus SHAP-style feature attribution for the tabular biomarker side.</li>
+        <li>A benchmark analytics view puts the FPGA's inference time directly against a CPU baseline, so the hardware acceleration story is visible in the same interface as the diagnosis.</li>
+        <li>A longitudinal case timeline tracks a patient's scans over time rather than treating each one as an isolated result.</li>
+        <li>Built on Next.js 16.1 / React 19 / TypeScript with Tailwind CSS v4, ending in a one-click PDF report export so a result can leave the browser as something a clinician can file.</li>
+      </ul>`,
   },
   {
     id: 'deriv',
@@ -49,6 +84,19 @@ export const projects: Project[] = [
       </ul>`,
     tags: ['TypeScript', 'Next.js 14', 'Redux Toolkit', 'Jest/RTL', 'Cypress', 'Webpack', 'Python', 'scikit-learn', 'Supabase', 'Recharts'],
     links: [{ label: 'GitHub', href: '#' }, { label: 'Live ↗', href: '#' }],
+    swBullets: [
+      '61-test Jest/RTL suite across 5 suites, one component built strictly test-first via TDD.',
+      '9-assertion Cypress E2E suite covering the critical trading flow.',
+      'Real-time Supabase subscriptions replacing 30-second polling, with row-level security.',
+      'Custom Webpack config: SVGR typed SVG imports, path aliases, and a bundle analyzer.',
+    ],
+    swDeepDive: `<p>The software side of an autonomous trading agent has to answer a harder question than "does it work": does it work honestly. Risk management is enforced at both the prompt and code level, a minimum 0.55 confidence threshold, a mandatory 2:1 reward-to-risk ratio, no pyramiding into open positions, and automatic closure on stop-loss or take-profit, plus persistent agent memory where the last 5 trade outcomes feed back into every new decision.</p>
+      <ul>
+        <li>The live dashboard runs on real-time Supabase subscriptions rather than 30-second polling, with P&amp;L tracking via Recharts and row-level security separating public reads from service-role writes.</li>
+        <li>A separate statistical validation layer in Python (logistic regression on lagged returns, RSI-14, SMA-20 deviation, and momentum features, trained on 5,000 hours of historical data with a chronological 80/20 split) is what surfaced the honest number: 52.51% directional accuracy against a 46.59% naive baseline.</li>
+        <li>That honest number only exists because a data-leakage bug that had produced a misleading 95.88% backtest accuracy got caught and fixed, then the corrected result got validated with Wilson confidence intervals rather than taken at face value.</li>
+        <li>Test coverage: a 61-test Jest/RTL suite across 5 suites (P&amp;L calculations, all 4 Redux reducers, component rendering), one component built strictly test-first via red-green-refactor TDD, and a 9-assertion Cypress E2E suite on the critical flow. The build itself runs on a custom Webpack config in next.config.js, SVGR for typed SVG imports, explicit path aliases, and a bundle analyzer.</li>
+      </ul>`,
     lenses: ['software'],
   },
   {
@@ -66,6 +114,18 @@ export const projects: Project[] = [
     tags: ['Next.js 15', 'TypeScript', 'Supabase', 'Groq API', 'Vercel'],
     links: [{ label: 'GitHub', href: '#' }, { label: 'Live ↗', href: '#' }],
     lenses: ['software'],
+    swBullets: [
+      'Parallel worker execution across 3 LLMs via a single orchestrated SSE pipeline.',
+      'Judge orchestrator agent: Jaccard similarity agreement scoring, then reconciled synthesis.',
+      'Auth-gated query history and shareable links on Supabase Postgres.',
+      'All three model cards stream concurrently via Promise.all.',
+    ],
+    swDeepDive: `<p>Querying three models at once is easy. Making the results useful together is the actual problem. Lumen runs parallel worker execution across 3 models simultaneously (Llama 3.3 70B, Qwen 3 32B, Kimi K2) through a single orchestrated request pipeline, with real-time SSE streaming so all three model cards populate concurrently via Promise.all rather than waiting on the slowest one.</p>
+      <ul>
+        <li>A judge orchestrator agent does the reconciliation in two steps: Jaccard similarity-based inter-agent agreement scoring (0-100%) first, then a synthesized answer drawing from all three outputs rather than just picking one.</li>
+        <li>Automated per-agent benchmarking scores each model 1-10 on accuracy, depth, and clarity, with a one-line critique and a winner selection, so the comparison isn't just the agreement score in isolation.</li>
+        <li>Deployed on Vercel with Supabase Postgres backing auth-gated query history, shareable links, and markdown export, the persistence layer that turns a one-off query into something worth coming back to.</li>
+      </ul>`,
   },
   {
     id: 'powerquality',
@@ -81,6 +141,18 @@ export const projects: Project[] = [
     tags: ['Python', 'NumPy FFT', 'Arduino Uno', 'PySerial', 'matplotlib'],
     links: [{ label: 'GitHub', href: '#' }],
     lenses: ['hardware'],
+    hwBullets: [
+      'Arduino Uno samples 64-point analog bursts from a simulated voltage transducer.',
+      'Raw ADC data streams over Serial (PySerial) to a Python host for processing.',
+      'NumPy FFT converts each burst from time domain to frequency domain.',
+      'UTF-8 stream-noise handling keeps the serial link stable under real interference.',
+    ],
+    hwDeepDive: `<p>This one's about catching a signal problem at the moment it happens rather than after the fact. An Arduino Uno captures 64-point analog bursts standing in for a voltage transducer reading, and streams them over Serial rather than batching and uploading later, since a real power-quality fault doesn't wait around.</p>
+      <ul>
+        <li>Each 64-point burst gets run through an FFT (NumPy) on the Python host, converting the raw time-domain samples into a frequency spectrum, which is what lets fundamental frequency and Total Harmonic Distortion (THD) actually get identified rather than eyeballed.</li>
+        <li>The live view is dual-domain in matplotlib: the raw waveform on one side, the harmonic-highlighted spectrum on the other, both updating as new bursts arrive.</li>
+        <li>Serial links carry noise, so the pipeline includes explicit UTF-8 error handling for the stream, the kind of detail that matters once this connects to anything with a real motor or inverter nearby.</li>
+      </ul>`,
   },
   {
     id: 'syncrow',
@@ -99,6 +171,19 @@ export const projects: Project[] = [
     tags: ['MQTT', 'ZigBee', 'Tuya Platform', 'Hikvision Systems', 'IoT Validation'],
     links: [],
     lenses: ['hardware'],
+    hwBullets: [
+      'Hands-on validation across 15+ IoT device types: intercoms, radar sensors, smart locks, ACs, energy clamps, gateways.',
+      'Designed the standardized 17-step test procedure, power-up through stress testing.',
+      'Worked directly with MQTT, ZigBee, and the Tuya platform for device integration.',
+      'Built a 30+ device specs and reliability catalogue from hands-on measurement.',
+    ],
+    hwDeepDive: `<p>422 hours, mostly spent finding out where hardware disagrees with its own spec sheet. The core of the role was structured validation and functional testing across 15+ IoT device types, Hikvision intercoms running facial recognition, fingerprint, biometric, and password modes, radar presence and motion sensors, smart door locks, smart ACs, energy clamps, and multi-mode gateways.</p>
+      <ul>
+        <li>Designed a standardized 17-step testing procedure from scratch: power-up, protocol handshake, network connectivity, latency, backend data validation, UI correctness, edge-case handling, and stress testing, so every device got measured the same way regardless of what it was.</li>
+        <li>Ran regression testing on the Syncrow Analytics dashboard itself, logging bugs and retesting after fixes through an internal issue tracker.</li>
+        <li>Built a structured device catalogue covering specs, measurement accuracy, reliability ratings, and integration capabilities for 30+ devices, plus validation requirements documentation written cross-functionally with the product owner and data scientist.</li>
+        <li>Worked directly with the Tuya platform for smart device integration, and researched MQTT, ZigBee, and wired vs. wireless IoT architectures as part of evaluating what these devices actually needed to talk to each other reliably.</li>
+      </ul>`,
   },
   {
     id: 'paperchat',
@@ -115,6 +200,18 @@ export const projects: Project[] = [
     tags: ['Next.js 14', 'FastAPI', 'Python', 'fastembed', 'NumPy', 'Groq API', 'Tailwind CSS'],
     links: [{ label: 'GitHub', href: '#' }, { label: 'Live ↗', href: '#' }],
     lenses: ['software'],
+    swBullets: [
+      'fastembed (ONNX) + custom NumPy cosine similarity, replacing PyTorch + ChromaDB.',
+      "Full pipeline running under 80MB RAM on Render's free tier, down from ~500MB.",
+      'Batched indexing (8 chunks at a time) to avoid memory spikes.',
+      'SSE streaming at ~800 tokens/sec via Groq API, with a live sources panel.',
+    ],
+    swDeepDive: `<p>The interesting engineering decision here wasn't the RAG pattern itself, it's what got ripped out to make it fit on a free-tier server. The original PyTorch + ChromaDB stack ran at ~500MB, well past what Render's free tier gives you. Swapping to fastembed (ONNX runtime, BAAI/bge-small-en-v1.5) plus a custom NumPy cosine similarity implementation got the full embedding pipeline under 80MB.</p>
+      <ul>
+        <li>Indexing batches 8 chunks at a time specifically to avoid memory spikes, with ~500-word chunks and overlap, and retrieves the top 4-5 chunks per query via 384-dimension cosine similarity.</li>
+        <li>Responses stream over SSE at roughly 800 tokens/sec via Groq API, with a sources panel that surfaces the exact chunks the answer actually drew from rather than a black-box response.</li>
+        <li>Deployment is split: a Next.js 14 App Router frontend on Vercel, a FastAPI/Uvicorn backend on Render, full CORS configuration between them, and zero infrastructure cost end to end.</li>
+      </ul>`,
   },
   {
     id: 'pitch',
@@ -172,6 +269,18 @@ export const projects: Project[] = [
     tags: ['Python', 'TensorFlow/Keras', 'OpenCV', 'MobileNet', 'Raspberry Pi GPIO'],
     links: [{ label: 'GitHub', href: '#' }],
     lenses: ['hardware'],
+    hwBullets: [
+      'GPIO-controlled stepper and servo motors respond directly to each classification result.',
+      'Full edge deployment: inference, motor control, and camera feed all run locally on a Raspberry Pi.',
+      'OpenCV captures and preprocesses camera frames in real time for the classifier.',
+      'No cloud dependency: a closed loop from camera to physical bin movement.',
+    ],
+    hwDeepDive: `<p>The interesting part of this one isn't the classifier, it's what happens after it decides. A MobileNet CNN fine-tuned on a custom 12-class waste dataset (battery, biological, cardboard, plastic, metal, glass variants, paper, clothes, shoes, trash) hits about 97% Top-1 accuracy after 50 training epochs, but that number only matters if something physical acts on it.</p>
+      <ul>
+        <li>OpenCV handles capture and preprocessing of camera frames in real time, at speeds workable for embedded deployment rather than a lab benchmark.</li>
+        <li>The classification result drives GPIO-controlled stepper and servo motors that physically redirect the item into the correct bin, actually closing the loop between inference and actuation instead of just logging a label.</li>
+        <li>Everything, inference, motor control, camera feed, runs locally on a Raspberry Pi with no cloud round-trip, which matters for a hackathon build meant to work live on a table, not against a server that might be down.</li>
+      </ul>`,
   },
   {
     id: 'handsfree',

@@ -73,7 +73,7 @@ export const projects: Project[] = [
         <li>Custom Webpack config in next.config.js: SVGR for typed SVG imports, explicit path aliases, and a bundle analyzer.</li>
       </ul>`,
     tags: ['TypeScript', 'Next.js 14', 'Redux Toolkit', 'Jest/RTL', 'Cypress', 'Webpack', 'Python', 'scikit-learn', 'Supabase', 'Recharts'],
-    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Deriv-Trading-Agent' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Deriv-Trading-Agent' }, { label: 'Live ↗', href: 'https://deriv-agent.vercel.app' }],
     swSummary: 'A 61-test Jest/RTL suite across 5 suites plus a 9-assertion Cypress E2E test covers the trading flow, with one component built strictly test-first via TDD. Real-time Supabase subscriptions (replacing 30-second polling) with row-level security drive the live dashboard, on a build using a custom Webpack config for typed SVG imports and bundle analysis.',
     swDeepDive: `<p>The software side of an autonomous trading agent has to answer a harder question than "does it work": does it work honestly. Risk management is enforced at both the prompt and code level, a minimum 0.55 confidence threshold, a mandatory 2:1 reward-to-risk ratio, no pyramiding into open positions, and automatic closure on stop-loss or take-profit, plus persistent agent memory where the last 5 trade outcomes feed back into every new decision.</p>
       <ul>
@@ -97,7 +97,7 @@ export const projects: Project[] = [
         <li>Deployed on Vercel with Supabase Postgres for auth-gated query history, shareable links, and markdown export.</li>
       </ul>`,
     tags: ['Next.js 15', 'TypeScript', 'Supabase', 'Groq API', 'Vercel'],
-    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Lumen' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Lumen' }, { label: 'Live ↗', href: 'https://lumen-ten-psi.vercel.app/dashboard' }],
     lenses: ['software'],
     swSummary: 'Parallel worker execution queries 3 LLMs simultaneously through one orchestrated pipeline, with real-time SSE streaming so all three model cards populate concurrently via Promise.all. A judge orchestrator agent reconciles the results with Jaccard similarity agreement scoring, backed by auth-gated query history on Supabase Postgres.',
     swDeepDive: `<p>Querying three models at once is easy. Making the results useful together is the actual problem. Lumen runs parallel worker execution across 3 models simultaneously (Llama 3.3 70B, Qwen 3 32B, Kimi K2) through a single orchestrated request pipeline, with real-time SSE streaming so all three model cards populate concurrently via Promise.all rather than waiting on the slowest one.</p>
@@ -168,7 +168,7 @@ export const projects: Project[] = [
         <li>Next.js 14 App Router frontend on Vercel, FastAPI/Uvicorn backend on Render, full CORS config, zero infrastructure cost, fully live.</li>
       </ul>`,
     tags: ['Next.js 14', 'FastAPI', 'Python', 'fastembed', 'NumPy', 'Groq API', 'Tailwind CSS'],
-    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/PaperChat' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/PaperChat' }, { label: 'Live ↗', href: 'https://paper-chat-five.vercel.app' }],
     lenses: ['software'],
     swSummary: "Swapped PyTorch and ChromaDB for fastembed (ONNX) and a custom NumPy cosine similarity implementation, dropping the full embedding pipeline from ~500MB to under 80MB RAM on Render's free tier. Batched indexing avoids memory spikes, and responses stream over SSE at ~800 tokens/sec via Groq API with a live sources panel.",
     swDeepDive: `<p>The interesting engineering decision here wasn't the RAG pattern itself, it's what got ripped out to make it fit on a free-tier server. The original PyTorch + ChromaDB stack ran at ~500MB, well past what Render's free tier gives you. Swapping to fastembed (ONNX runtime, BAAI/bge-small-en-v1.5) plus a custom NumPy cosine similarity implementation got the full embedding pipeline under 80MB.</p>
@@ -190,7 +190,7 @@ export const projects: Project[] = [
         <li>Deployed independently to Render and Vercel with git-triggered CI/CD, environment-based CORS/secrets handling, and a reproducible one-click blueprint config.</li>
       </ul>`,
     tags: ['Python', 'FastAPI', 'Pydantic', 'Next.js', 'TypeScript', 'Groq API', 'pytest', 'Render', 'Vercel'],
-    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/pitch-angle-finder' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/pitch-angle-finder' }, { label: 'Live ↗', href: 'https://pitch-angle-finder.vercel.app' }],
   },
   {
     id: 'audit',

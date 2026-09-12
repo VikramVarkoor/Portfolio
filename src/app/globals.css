@@ -66,20 +66,20 @@ a { color: inherit; }
 .channel-row .info { flex: 1; min-width: 0; }
 .channel-row h3 { font-size: 17px; margin-bottom: 6px; font-weight: 600; }
 .channel-row p { font-size: 12.5px; color: #9aa39c; line-height: 1.5; max-width: 520px; }
-.channel-row .flags { margin-top: 10px; display: flex; gap: 16px; flex-wrap: wrap; font-family: 'Courier New', monospace; font-size: 11px; color: #7ed9a3; }
+.channel-row .flags { margin-top: 10px; display: flex; gap: 16px; flex-wrap: wrap; font-family: 'Courier New', monospace; font-size: 13px; color: #9bffc4; }
 .channel-row .flags span::before { content: '--'; opacity: 0.5; }
 .channel-row .arrow { font-family: 'Courier New', monospace; color: #4dff9e44; font-size: 22px; flex-shrink: 0; transition: transform 0.2s, color 0.2s; }
 .channel-row:hover .arrow { color: #4dff9e; transform: translateX(4px); }
 
 .dirlisting { font-family: 'Courier New', monospace; font-size: 12.5px; border-top: 1px solid rgba(77,255,158,0.14); }
-.dirgroup { font-size: 11px; letter-spacing: 1.5px; color: #d4af37; text-transform: uppercase; padding: 22px 6px 10px; }
+.dirgroup { font-size: 13px; letter-spacing: 1.5px; color: #f0cf6e; text-transform: uppercase; padding: 22px 6px 10px; font-weight: 600; }
 .dirgroup:first-child { padding-top: 16px; }
 .dirrow { display: grid; grid-template-columns: 16px 240px 1fr 150px; gap: 18px; padding: 12px 6px; border-bottom: 1px dashed rgba(77,255,158,0.1); cursor: pointer; align-items: baseline; scroll-margin-top: 40px; background: none; width: 100%; text-align: left; font: inherit; color: inherit; border-left: none; border-right: none; border-top: none; }
 .dirrow:hover { background: rgba(77,255,158,0.045); }
 .dirrow .prefix { color: #4dff9e88; }
 .dirrow .fname { color: #cdffe4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dirrow .desc { color: #7c8480; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.dirrow .tagflag { color: #4dff9e77; font-size: 11px; text-align: right; }
+.dirrow .tagflag { color: #7ed9a3; font-size: 12.5px; text-align: right; }
 @media (max-width: 900px) {
   .dirrow { grid-template-columns: 14px 1fr; }
   .dirrow .desc, .dirrow .tagflag { display: none; }

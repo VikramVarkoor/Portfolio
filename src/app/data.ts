@@ -38,7 +38,7 @@ export const projects: Project[] = [
         <li>Full-stack clinical dashboard in Next.js 16.1 / React 19 / TypeScript: interactive 3D MRI viewer, Grad-CAM heatmap overlays, SHAP-style feature attribution, FPGA vs. CPU benchmark analytics, longitudinal case timeline, one-click PDF report export.</li>
       </ul>`,
     tags: ['Vitis HLS', 'Vivado', 'Zynq-7020', 'XGBoost', 'Optuna', 'Next.js 16', 'TypeScript', 'Tailwind CSS v4'],
-    links: [{ label: 'Demo ▶', href: '#' }],
+    links: [],
     lenses: ['hardware', 'software'],
     hwSummary: "Vitis HLS 2022.1 kernel synthesized to RTL and mapped onto the Zynq-7020 fabric via Vivado, closing timing at 100MHz (10.95ns actual vs. a 15ns constraint) at 13% LUT and 22% DSP utilization. The ARM Cortex-A9 talks to the FPGA over AXI4-Stream DMA on shared DDR, so the 1.32s bilateral GLCM extraction runs entirely in hardware without blocking the ARM core.",
     hwDeepDive: `<p>The hardware brief here was inference speed on commodity silicon: get an MRI scan to a diagnosis fast enough to be clinically useful, on a board that costs less than a night in the hospital it's meant to serve. Vitis HLS let the GLCM feature-extraction pipeline get written in C++ with pipeline directives rather than hand-rolled RTL, then get synthesized down onto the Zynq-7020's programmable logic through Vivado.</p>
@@ -73,7 +73,7 @@ export const projects: Project[] = [
         <li>Custom Webpack config in next.config.js: SVGR for typed SVG imports, explicit path aliases, and a bundle analyzer.</li>
       </ul>`,
     tags: ['TypeScript', 'Next.js 14', 'Redux Toolkit', 'Jest/RTL', 'Cypress', 'Webpack', 'Python', 'scikit-learn', 'Supabase', 'Recharts'],
-    links: [{ label: 'GitHub', href: '#' }, { label: 'Live ↗', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Deriv-Trading-Agent' }],
     swSummary: 'A 61-test Jest/RTL suite across 5 suites plus a 9-assertion Cypress E2E test covers the trading flow, with one component built strictly test-first via TDD. Real-time Supabase subscriptions (replacing 30-second polling) with row-level security drive the live dashboard, on a build using a custom Webpack config for typed SVG imports and bundle analysis.',
     swDeepDive: `<p>The software side of an autonomous trading agent has to answer a harder question than "does it work": does it work honestly. Risk management is enforced at both the prompt and code level, a minimum 0.55 confidence threshold, a mandatory 2:1 reward-to-risk ratio, no pyramiding into open positions, and automatic closure on stop-loss or take-profit, plus persistent agent memory where the last 5 trade outcomes feed back into every new decision.</p>
       <ul>
@@ -97,7 +97,7 @@ export const projects: Project[] = [
         <li>Deployed on Vercel with Supabase Postgres for auth-gated query history, shareable links, and markdown export.</li>
       </ul>`,
     tags: ['Next.js 15', 'TypeScript', 'Supabase', 'Groq API', 'Vercel'],
-    links: [{ label: 'GitHub', href: '#' }, { label: 'Live ↗', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Lumen' }],
     lenses: ['software'],
     swSummary: 'Parallel worker execution queries 3 LLMs simultaneously through one orchestrated pipeline, with real-time SSE streaming so all three model cards populate concurrently via Promise.all. A judge orchestrator agent reconciles the results with Jaccard similarity agreement scoring, backed by auth-gated query history on Supabase Postgres.',
     swDeepDive: `<p>Querying three models at once is easy. Making the results useful together is the actual problem. Lumen runs parallel worker execution across 3 models simultaneously (Llama 3.3 70B, Qwen 3 32B, Kimi K2) through a single orchestrated request pipeline, with real-time SSE streaming so all three model cards populate concurrently via Promise.all rather than waiting on the slowest one.</p>
@@ -119,7 +119,7 @@ export const projects: Project[] = [
         <li>UTF-8 error handling manages asynchronous stream noise from the serial connection, keeping the pipeline stable under noisy communication.</li>
       </ul>`,
     tags: ['Python', 'NumPy FFT', 'Arduino Uno', 'PySerial', 'matplotlib'],
-    links: [{ label: 'GitHub', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Power-Quality-Spectral-Analyzer' }],
     lenses: ['hardware'],
     hwSummary: "An Arduino Uno samples 64-point analog bursts from a simulated voltage transducer and streams raw ADC data over Serial (PySerial) to a Python host. There, a NumPy FFT converts each burst to the frequency domain for THD detection, with explicit UTF-8 error handling keeping the serial link stable under real interference.",
     hwDeepDive: `<p>This one's about catching a signal problem at the moment it happens rather than after the fact. An Arduino Uno captures 64-point analog bursts standing in for a voltage transducer reading, and streams them over Serial rather than batching and uploading later, since a real power-quality fault doesn't wait around.</p>
@@ -168,7 +168,7 @@ export const projects: Project[] = [
         <li>Next.js 14 App Router frontend on Vercel, FastAPI/Uvicorn backend on Render, full CORS config, zero infrastructure cost, fully live.</li>
       </ul>`,
     tags: ['Next.js 14', 'FastAPI', 'Python', 'fastembed', 'NumPy', 'Groq API', 'Tailwind CSS'],
-    links: [{ label: 'GitHub', href: '#' }, { label: 'Live ↗', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/PaperChat' }],
     lenses: ['software'],
     swSummary: "Swapped PyTorch and ChromaDB for fastembed (ONNX) and a custom NumPy cosine similarity implementation, dropping the full embedding pipeline from ~500MB to under 80MB RAM on Render's free tier. Batched indexing avoids memory spikes, and responses stream over SSE at ~800 tokens/sec via Groq API with a live sources panel.",
     swDeepDive: `<p>The interesting engineering decision here wasn't the RAG pattern itself, it's what got ripped out to make it fit on a free-tier server. The original PyTorch + ChromaDB stack ran at ~500MB, well past what Render's free tier gives you. Swapping to fastembed (ONNX runtime, BAAI/bge-small-en-v1.5) plus a custom NumPy cosine similarity implementation got the full embedding pipeline under 80MB.</p>
@@ -190,7 +190,7 @@ export const projects: Project[] = [
         <li>Deployed independently to Render and Vercel with git-triggered CI/CD, environment-based CORS/secrets handling, and a reproducible one-click blueprint config.</li>
       </ul>`,
     tags: ['Python', 'FastAPI', 'Pydantic', 'Next.js', 'TypeScript', 'Groq API', 'pytest', 'Render', 'Vercel'],
-    links: [{ label: 'GitHub', href: '#' }, { label: 'Live ↗', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/pitch-angle-finder' }],
   },
   {
     id: 'audit',
@@ -204,7 +204,7 @@ export const projects: Project[] = [
         <li>Uses CrewAI's Process.sequential mode, where each task's output is automatically passed as context to the next agent, eliminating manual state management.</li>
       </ul>`,
     tags: ['Python', 'CrewAI', 'LangChain', 'Gemini API', 'Streamlit'],
-    links: [{ label: 'GitHub', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Audit-agent' }],
   },
   {
     id: 'smartmeter',
@@ -218,7 +218,7 @@ export const projects: Project[] = [
         <li>README documents the full pandas-to-Spark conceptual shift: lazy evaluation, DAG execution, the Catalyst optimizer, partition pruning, and when Spark is actually the wrong tool.</li>
       </ul>`,
     tags: ['Python', 'PySpark', 'Spark SQL', 'pandas', 'SQLite', 'NumPy', 'Parquet'],
-    links: [{ label: 'GitHub', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Smart-meter-analytics' }],
   },
   {
     id: 'smartbin',
@@ -232,7 +232,7 @@ export const projects: Project[] = [
         <li>Full edge deployment: inference, motor control, and camera feed all run locally on Raspberry Pi with no cloud dependency.</li>
       </ul>`,
     tags: ['Python', 'TensorFlow/Keras', 'OpenCV', 'MobileNet', 'Raspberry Pi GPIO'],
-    links: [{ label: 'GitHub', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Smart-Bin' }],
     lenses: ['hardware'],
     hwSummary: 'OpenCV captures and preprocesses camera frames in real time, feeding a MobileNet classifier whose result drives GPIO-controlled stepper and servo motors to physically redirect each item. Inference, motor control, and camera feed all run locally on a Raspberry Pi, closing the loop with no cloud dependency.',
     hwDeepDive: `<p>The interesting part of this one isn't the classifier, it's what happens after it decides. A MobileNet CNN fine-tuned on a custom 12-class waste dataset (battery, biological, cardboard, plastic, metal, glass variants, paper, clothes, shoes, trash) hits about 97% Top-1 accuracy after 50 training epochs, but that number only matters if something physical acts on it.</p>
@@ -253,7 +253,7 @@ export const projects: Project[] = [
         <li>Key challenge: macOS accessibility sandboxing blocks standard automation libraries like PyAutoGUI from touching system audio. Bypassed it with a native AppleScript bridge talking directly to Core Audio, achieving reliable control without accessibility permissions.</li>
       </ul>`,
     tags: ['Python', 'OpenCV', 'Haar Cascade', 'AppleScript', 'macOS Core Audio'],
-    links: [{ label: 'GitHub', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/AI-HandsFree-OS-Controller' }],
   },
   {
     id: 'theft',
@@ -267,7 +267,7 @@ export const projects: Project[] = [
         <li>Companion project to Smart Meter Analytics: this one handles real-time edge alerting, the analytics repo handles historical batch analysis.</li>
       </ul>`,
     tags: ['Python', 'Arduino Uno', 'C++', 'PySerial', 'matplotlib'],
-    links: [{ label: 'GitHub', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Smart-Grid-Theft-Detector' }],
   },
   {
     id: 'rgbled',
@@ -281,7 +281,7 @@ export const projects: Project[] = [
         <li>Repository includes the full Altium schematic and layout files, a PDF schematic export, a complete BOM, and fabrication-ready Gerbers.</li>
       </ul>`,
     tags: ['EasyEDA Pro', 'Altium Designer', 'KiCad-compatible Gerbers'],
-    links: [{ label: 'GitHub', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/USB-RGB-LED-Controller-using-EasyEDA' }],
   },
   {
     id: 'rfid',
@@ -295,7 +295,7 @@ export const projects: Project[] = [
         <li>Full embedded stack: SPI between Arduino and MFRC522, servo PWM, GPIO for LEDs/buzzer, UART Serial logging, all in C++.</li>
       </ul>`,
     tags: ['C++', 'Arduino Uno', 'MFRC522', 'Servo Motor'],
-    links: [{ label: 'GitHub', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Card-Reader' }],
   },
   {
     id: 'carbon',
@@ -310,7 +310,7 @@ export const projects: Project[] = [
         <li>Supplier audit and compliance module with risk scoring, audit trail logging, and role-based access control via Odoo security rules.</li>
       </ul>`,
     tags: ['JavaScript', 'Python', 'Odoo Framework', 'PostgreSQL'],
-    links: [{ label: 'GitHub', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Carbon-Emission-and-Sustainabillity-tracker-with-image-detection' }],
   },
   {
     id: 'retail',
@@ -324,7 +324,7 @@ export const projects: Project[] = [
         <li>README includes interview-ready talking points on the business reasoning behind each query.</li>
       </ul>`,
     tags: ['Python', 'pandas', 'SQLite', 'SQL Window Functions', 'Tableau Public'],
-    links: [{ label: 'GitHub', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Retail-Operations-Analytics' }],
   },
   {
     id: 'envdash',
@@ -337,7 +337,7 @@ export const projects: Project[] = [
         <li>Asynchronous HTTP architecture (aiohttp) allows multiple location queries to be fetched concurrently, non-blocking.</li>
       </ul>`,
     tags: ['Python', 'OpenWeatherMap API', 'aiohttp', 'matplotlib'],
-    links: [{ label: 'GitHub', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Global-Environmental-Intelligence-Dashboard' }],
   },
   {
     id: 'watersensor',
@@ -350,7 +350,7 @@ export const projects: Project[] = [
         <li>Readings printed to Serial every second for real-time monitoring and logging via the Arduino IDE serial plotter.</li>
       </ul>`,
     tags: ['C++', 'Arduino Uno', 'Analog ADC'],
-    links: [{ label: 'GitHub', href: '#' }],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Water-Sensor' }],
   },
 ]
 
@@ -381,7 +381,7 @@ export const skillsData = [
   { cat: 'IoT', items: 'MQTT · ZigBee · Tuya Platform · Device Validation' },
 ]
 
-export const educationRows = [
+export const educationRows: { status: string; statusClass: string; venue: string; title: string; note: string; badge: string; badgeHref?: string }[] = [
   {
     status: 'IN PROGRESS',
     statusClass: 'rev',
@@ -389,6 +389,7 @@ export const educationRows = [
     title: 'MSc Artificial Intelligence',
     note: 'starting Sep 2026',
     badge: '🎓 Duffin Family Future Shapers Scholarship',
+    badgeHref: 'https://www.hw.ac.uk/dubai/study/fees-and-funding/scholarships-and-discounts/the-duffin-family-future-shapers-scholarship',
   },
   {
     status: 'COMPLETED',

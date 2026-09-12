@@ -170,7 +170,13 @@ export default function Home() {
               <span className={`status ${row.statusClass}`}>{row.status}</span>
               <span className="venue">{row.venue}</span>
               <span className="ptitle">{row.title}<span className="edu-note">, {row.note}</span></span>
-              {row.badge ? <span className="edu-badge">{row.badge}</span> : <span />}
+              {row.badge ? (
+                row.badgeHref ? (
+                  <a className="edu-badge" href={row.badgeHref} target="_blank" rel="noopener noreferrer">{row.badge}</a>
+                ) : (
+                  <span className="edu-badge">{row.badge}</span>
+                )
+              ) : <span />}
             </div>
           ))}
         </div>

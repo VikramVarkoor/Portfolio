@@ -101,7 +101,8 @@ a { color: inherit; }
 }
 .edulog .prow { grid-template-columns: 118px 170px 1fr auto; }
 .edulog .edu-note { color: #7c8480; }
-.edulog .edu-badge { font-size: 10.5px; color: #d4af37; border: 1px solid #d4af3755; background: rgba(212,175,55,0.07); padding: 4px 10px; border-radius: 20px; white-space: nowrap; justify-self: end; }
+.edulog .edu-badge { font-size: 10.5px; color: #d4af37; border: 1px solid #d4af3755; background: rgba(212,175,55,0.07); padding: 4px 10px; border-radius: 20px; white-space: nowrap; justify-self: end; text-decoration: none; display: inline-block; transition: all 0.15s; }
+a.edu-badge:hover { border-color: #d4af37; background: rgba(212,175,55,0.14); color: #f0cf6e; }
 @media (max-width: 900px) { .edulog .prow { grid-template-columns: 1fr; } .edulog .edu-badge { justify-self: start; } }
 
 .skillsblock { font-family: 'Courier New', monospace; font-size: 12.5px; background: #0a0d0c; border: 1px solid rgba(77,255,158,0.18); border-radius: 8px; padding: 24px 26px; }

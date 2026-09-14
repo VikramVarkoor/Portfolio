@@ -377,6 +377,7 @@ export const CHANNEL_ICONS: Record<string, string> = {
 export const skillsData = [
   { cat: 'AI / ML', items: 'Python · LangChain · CrewAI · RAG · XGBoost · scikit-learn · Prompt Engineering · fastembed / ONNX' },
   { cat: 'Full-Stack', items: 'Next.js · TypeScript · React · Supabase · FastAPI · REST / SSE' },
+  { cat: 'Cloud / DevOps', items: 'Vercel · Render · Azure (App Service, Static Web Apps) · GitHub Actions CI/CD' },
   { cat: 'Hardware', items: 'FPGA (Vitis HLS, Vivado, Zynq-7020) · Arduino · PCB Design · I2C / SPI / UART' },
   { cat: 'Data', items: 'PySpark · pandas · SQL (window functions) · Tableau · NumPy / FFT' },
   { cat: 'IoT', items: 'MQTT · ZigBee · Tuya Platform · Device Validation' },

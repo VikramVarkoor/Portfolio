@@ -180,16 +180,17 @@ export const projects: Project[] = [
   },
   {
     id: 'pitch',
-    kicker: 'Production Deployed · AI / PR Tooling',
+    kicker: 'Dual-Cloud Deployed · AI / PR Tooling',
     title: 'Pitch Angle Finder',
-    short: 'AI PR-angle generator with a genuine production reliability fix.',
+    short: 'AI PR-angle generator, deployed independently across two clouds.',
     body: `<p>Full-stack AI application (FastAPI backend, Next.js/TypeScript frontend) generating realistic PR pitch angles from a live LLM call, with a system prompt encoding five explicit newsworthiness criteria and structured JSON output validated against a Pydantic schema before reaching the client.</p>
       <ul>
         <li>Diagnosed a live production failure (a deprecated LLM model returning 404s) through direct testing against the deployed API, fixed it, and made the model configurable via environment variable to prevent recurrence.</li>
         <li>Built and shipped a retry mechanism handling two distinct LLM reliability failure modes (incomplete output, malformed JSON), covered by an automated test exercising the real retry path and verified with repeated live production calls.</li>
-        <li>Deployed independently to Render and Vercel with git-triggered CI/CD, environment-based CORS/secrets handling, and a reproducible one-click blueprint config.</li>
+        <li>Deployed independently to Render and Vercel with git-triggered CI/CD, then shipped a second, fully independent instance to Microsoft Azure (App Service backend, Static Web Apps frontend) with Azure-triggered GitHub Actions CI/CD, running side by side with the original deployment without touching it.</li>
+        <li>Diagnosed and resolved four distinct real Azure deployment failures at their actual root cause: free-tier compute and CPU-minute quota limits, a Basic Authentication default blocking publish credentials, and a GitHub OAuth workflow-scope restriction blocking CI/CD, then switched the frontend to a static export to run on Azure's genuine free tier and correctly wired the build-time environment variable so it reliably reaches the live backend.</li>
       </ul>`,
-    tags: ['Python', 'FastAPI', 'Pydantic', 'Next.js', 'TypeScript', 'Groq API', 'pytest', 'Render', 'Vercel'],
+    tags: ['Python', 'FastAPI', 'Pydantic', 'Next.js', 'TypeScript', 'Groq API', 'pytest', 'Render', 'Vercel', 'Azure'],
     links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/pitch-angle-finder' }, { label: 'Live ↗', href: 'https://pitch-angle-finder.vercel.app' }],
   },
   {

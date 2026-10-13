@@ -108,6 +108,30 @@ export const projects: Project[] = [
       </ul>`,
   },
   {
+    id: 'churn',
+    kicker: 'Portfolio Project · Data Engineering / ML',
+    title: 'Churn-CLV-DBT',
+    short: 'Leakage-safe churn, segmentation & CLV warehouse built in dbt + DuckDB.',
+    body: `<p>A parameterised customer analytics warehouse built in dbt (dbt-duckdb) and DuckDB over 1,067,371 invoice line items and 5,942 customers, with staging, intermediate and mart layers driven by a single cutoff_date variable across three time-based cutoffs, feeding leakage-safe churn prediction, RFM/k-means segmentation, and BG/NBD + Gamma-Gamma CLV modelling.</p>
+      <ul>
+        <li>Enforced leakage safety with an invoice_date &lt; cutoff_date filter implemented twice (a dbt singular test and a pytest check), validated by deliberately planting a leak, confirming both checks failed, then reverting it.</li>
+        <li>Evaluated churn prediction out-of-time (n=5,224, 57.2% churned) comparing a recency rule, logistic regression on RFM features, and LightGBM via PR-AUC with customer-level bootstrap confidence intervals, reporting honestly that no model clearly beat the simple recency rule.</li>
+        <li>Diagnosed a threshold failure where F1-optimised thresholding collapsed to a 1-day threshold under a 66.8% churn base rate, and fixed it by switching to Youden's J for a 49-day threshold (precision 0.673, recall 0.885).</li>
+        <li>Segmented customers via RFM quintiles and k-means (silhouette scan over k=3 to 8, bootstrap-ARI stability check): the top 16.46% of customers drive 68.1% of revenue, while the largest segment holds 39.59% of customers but only 5.2% of revenue.</li>
+        <li>Added an LLM summary layer (Groq) guarded by a deterministic verifier checking regex number-matching against source data, unsupported-segment detection, and causal-language detection, with an offline stub client so the pipeline runs and tests without an API key.</li>
+      </ul>`,
+    tags: ['Python', 'dbt', 'DuckDB', 'LightGBM', 'PyMC-Marketing', 'pytest', 'Groq API'],
+    links: [{ label: 'GitHub', href: 'https://github.com/VikramVarkoor/Churn-CLV-DBT' }],
+    lenses: ['software'],
+    swSummary: 'A parameterised dbt + DuckDB warehouse over 1M+ invoice line items runs leakage-safe churn prediction, RFM/k-means segmentation, and BG/NBD + Gamma-Gamma CLV modelling across three time-based cutoffs. Leakage checks are implemented twice and validated by deliberately planting and reverting a real leak, with an LLM summary layer guarded by a deterministic verifier and an offline stub client for testing without an API key.',
+    swDeepDive: `<p>The actual engineering problem here wasn't training a churn model, it was proving the whole pipeline could be trusted end to end: that the warehouse doesn't leak future information into training data, that a model claiming to beat a naive baseline actually does, and that an LLM asked to summarize the results doesn't just make things up.</p>
+      <ul>
+        <li>Ran a data audit before any modelling and documented how each issue was handled: 22.77% of rows missing a customer ID, 34,335 duplicate rows reconciled to 32,907 duplicate groups, and 3,457 negative-quantity write-off rows.</li>
+        <li>When BG/NBD and Gamma-Gamma CLV modelling (pymc-marketing) over a 245-day horizon returned a negative Gamma-Gamma value (-3,050.94) on a smoke test, added an empirical-mean fallback rather than shipping the broken output.</li>
+        <li>Wrote a 324-line design.md before writing any code, and kept a BUGLOG.md of 7 real bugs found along the way, including a retired Groq model, a full-refresh that silently wiped other cutoffs' rows, and an error-severity setting that silently skipped 23 of 31 dbt nodes.</li>
+      </ul>`,
+  },
+  {
     id: 'powerquality',
     kicker: 'Personal Project · Embedded / DSP',
     title: 'Power Quality Spectral Analyzer',
@@ -357,7 +381,7 @@ export const projects: Project[] = [
 
 export const projectMap: Record<string, Project> = Object.fromEntries(projects.map(p => [p.id, p]))
 
-export const SPOTLIGHT_IDS = ['synapse', 'deriv', 'lumen']
+export const SPOTLIGHT_IDS = ['synapse', 'deriv', 'lumen', 'churn']
 
 export const ARCHIVE_GROUPS: { label: string; ids: string[] }[] = [
   { label: 'AI & Full-Stack', ids: ['paperchat', 'pitch', 'audit'] },
@@ -366,12 +390,13 @@ export const ARCHIVE_GROUPS: { label: string; ids: string[] }[] = [
 ]
 
 export const HARDWARE_LENS_IDS = ['synapse', 'powerquality', 'smartbin', 'syncrow']
-export const SOFTWARE_LENS_IDS = ['synapse', 'deriv', 'lumen', 'paperchat']
+export const SOFTWARE_LENS_IDS = ['synapse', 'deriv', 'lumen', 'paperchat', 'churn']
 
 export const CHANNEL_ICONS: Record<string, string> = {
   synapse: '<rect x="7" y="7" width="10" height="10" rx="1"/><path d="M7 10H3M7 14H3M17 10h4M17 14h4M10 7V3M14 7V3M10 21v-4M14 21v-4"/>',
   deriv: '<polyline points="3,17 9,11 13,15 21,5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="15,5 21,5 21,11" stroke-linecap="round" stroke-linejoin="round"/>',
   lumen: '<circle cx="12" cy="4.5" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M12 6.5L6.3 16.4M12 6.5l5.7 9.9M7.5 18h9"/>',
+  churn: '<path d="M4 20V12M10 20V7M16 20V3M20 20H4" stroke-linecap="round" stroke-linejoin="round"/>',
 }
 
 export const skillsData = [

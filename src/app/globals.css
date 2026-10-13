@@ -29,6 +29,20 @@ a { color: inherit; }
 .home-hero .cvbtn:hover { border-color: #d4af37; background: rgba(212,175,55,0.08); }
 .home-hero nav { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; padding: 26px 60px; z-index: 10; font-size: 13px; flex-wrap: wrap; gap: 12px; }
 .home-hero nav .links { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+
+/* On phones the 4 nav buttons wrap onto several lines, which grows well
+   past the height the vertically-centered hero content assumes it needs
+   (nav is position:absolute so it doesn't push that content down) and the
+   two visually collide. Below this width, take nav out of absolute
+   positioning so it sits in normal flow above the title instead. */
+@media (max-width: 680px) {
+  .home-hero { padding: 28px 22px 50px; min-height: auto; justify-content: flex-start; }
+  .home-hero nav { position: static; padding: 0 0 26px; justify-content: flex-start; }
+  .home-hero nav .links { width: 100%; }
+  .home-hero nav .links a, .home-hero nav .links button { flex: 1 1 auto; justify-content: center; text-align: center; }
+  .home-hero h1, .home-hero .type-h1 { font-size: 34px; line-height: 1.15; }
+  .home-hero svg.wave { bottom: 30px; }
+}
 .home-hero nav .links button {
   background: rgba(77,255,158,0.06); border: 1px solid #2f5f43; color: #9fffc4; font-family: inherit;
   font-size: 13.5px; font-weight: 600; cursor: pointer; letter-spacing: 0.5px; padding: 11px 20px;

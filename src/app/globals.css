@@ -36,12 +36,19 @@ a { color: inherit; }
    two visually collide. Below this width, take nav out of absolute
    positioning so it sits in normal flow above the title instead. */
 @media (max-width: 680px) {
-  .home-hero { padding: 28px 22px 50px; min-height: auto; justify-content: flex-start; }
+  /* The hero used to be a fixed ~92vh-tall block, so the wave graphic
+     (positioned a fixed distance from the hero's bottom edge) always had a
+     big empty stretch below the text to float in. Once the hero was
+     changed to shrink-to-fit its content on phones, that empty stretch
+     went away and the wave landed on top of the status line instead.
+     Shrink the wave and give the hero real bottom padding so there's
+     guaranteed clear space between the text and where the wave starts. */
+  .home-hero { padding: 28px 22px 100px; min-height: auto; justify-content: flex-start; }
   .home-hero nav { position: static; padding: 0 0 26px; justify-content: flex-start; }
   .home-hero nav .links { width: 100%; }
   .home-hero nav .links a, .home-hero nav .links button { flex: 1 1 auto; justify-content: center; text-align: center; }
   .home-hero h1, .home-hero .type-h1 { font-size: 34px; line-height: 1.15; }
-  .home-hero svg.wave { bottom: 30px; }
+  .home-hero svg.wave { bottom: 0; height: 65px; }
 }
 .home-hero nav .links button {
   background: rgba(77,255,158,0.06); border: 1px solid #2f5f43; color: #9fffc4; font-family: inherit;
@@ -345,4 +352,11 @@ a.edu-badge:hover { border-color: #d4af37; background: rgba(212,175,55,0.14); co
   .codelink { padding: 10px 0; margin: -10px 0; }
   .specrow .fulllink { padding: 10px 0; margin: -10px 0; }
   .specrow .deeplink { padding: 11px 14px; }
+
+  /* The ⌘K hint is a desktop keyboard-shortcut affordance. On a phone
+     there's no keyboard for it to refer to, and because it's
+     position:fixed it just floats over whatever content is scrolled
+     underneath it, which reads as a visual glitch rather than a feature.
+     Hide it below the width a hardware keyboard stops being likely. */
+  .palette-hint { display: none; }
 }

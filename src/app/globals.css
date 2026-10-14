@@ -132,7 +132,7 @@ a.edu-badge:hover { border-color: #d4af37; background: rgba(212,175,55,0.14); co
 /* ===== project detail modal ===== */
 .modal-overlay { position: fixed; inset: 0; background: rgba(4,6,5,0.75); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 70px 20px; overscroll-behavior: contain; }
 .modal-box { background: #101412; border: 1px solid #262b28; border-top: 3px solid #d4af37; border-radius: 14px; max-width: 640px; width: 100%; padding: 40px; position: relative; color: #e8ede9; font-family: -apple-system, sans-serif; max-height: 82vh; overflow-y: auto; overscroll-behavior: contain; }
-.modal-box .close { position: absolute; top: 20px; right: 22px; background: none; border: none; color: #8b9390; font-size: 22px; cursor: pointer; }
+.modal-box .close { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #8b9390; font-size: 20px; cursor: pointer; padding: 12px; line-height: 1; }
 .modal-box .close:hover { color: #fff; }
 .modal-box h2 { font-size: 26px; margin-bottom: 6px; }
 .modal-box .mkicker { font-size: 11px; letter-spacing: 2px; color: #d4af37; text-transform: uppercase; margin-bottom: 18px; }
@@ -333,4 +333,16 @@ a.edu-badge:hover { border-color: #d4af37; background: rgba(212,175,55,0.14); co
   a { color: #111 !important; text-decoration: underline; }
   .kicker, .lens-kicker, .specrow .tag, .dirgroup, .publog .venue { color: #555 !important; }
   .channel-row p, .dirrow .desc, .home-body .subhead, .specrow p, .lens-sub { color: #333 !important; }
+}
+
+/* Touch targets: a couple of small/text-style buttons measure under the
+   ~44px comfortable minimum tap height on a phone. Both are isolated with
+   room around them so mis-taps aren't likely, but padding them out on
+   touch-sized screens costs nothing and removes the fiddliness. Placed at
+   the end of the file so it wins the cascade over the base rules above. */
+@media (max-width: 680px) {
+  .lens-nav button.back { padding: 12px 18px; }
+  .codelink { padding: 10px 0; margin: -10px 0; }
+  .specrow .fulllink { padding: 10px 0; margin: -10px 0; }
+  .specrow .deeplink { padding: 11px 14px; }
 }

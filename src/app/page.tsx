@@ -17,7 +17,7 @@ import {
   publicationsRows,
 } from './data'
 
-const LAST_UPDATED = 'September 2026'
+const LAST_UPDATED = 'November 2026'
 
 export default function Home() {
   const { wipeNavigate } = useWipe()
@@ -70,10 +70,10 @@ export default function Home() {
         <HeroWave />
         <TypewriterName text="VIKRAM VARKOOR" />
         <div className="sub">
-          FPGA-accelerated systems &amp; applied AI. Two IEEE papers. Currently shipping at the intersection of embedded hardware and machine learning.
+          FPGA-accelerated systems, applied AI, and forecasting pipelines. Two IEEE papers. Currently shipping across embedded hardware, machine learning, and data science.
         </div>
         <div className="status-line">
-          <span className="status-dot" /> Currently: MSc AI @ Heriot-Watt Dubai, starting Sept 2026 · Open to full-time roles
+          <span className="status-dot" /> Currently: MSc AI @ Heriot-Watt Dubai, started Sept 2026 · Open to full-time roles
         </div>
       </section>
 

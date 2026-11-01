@@ -25,6 +25,35 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: 'forecast',
+    kicker: 'Production Deployed · Forecasting / Data Science',
+    title: 'Forecast Harness',
+    short: 'Day-ahead demand forecasting for NYC taxis and EU electricity, backtested against baselines.',
+    body: `<p>A forecasting harness that predicts next-day hourly demand for NYC ride-hail trips across 30 taxi zones and next-day electricity load for 10 European countries, scored on 28 held-out days each against simple baselines, with every number on the live site traced back to a results file.</p>
+      <ul>
+        <li>Cut held-out MAE 13.7% on taxi pickups (31.38 vs. 36.37) and 44.3% on European electricity load (423 vs. 759 MW) against a simple baseline, winning on 26 of 28 and 27 of 28 days respectively.</li>
+        <li>Added a held-out guard that loads the final weeks in one function and refuses a second scoring run unless forced, plus a leak test that recomputes features from raw history and is shown to fail when a leak is deliberately planted.</li>
+        <li>Compared the electricity model against the grid operators' own forecast (468 MW) and reported it as not clearly different rather than claiming a win, then ran a separate weather test on 28 unseen days where measured temperature cut error by about 14% across all 10 countries.</li>
+        <li>Investigated the taxi model's held-out under-forecast (-8.0 vs. +1.3 trips per zone-hour on development days): held-out demand ran 4.6% above the development average, and 5 of 30 zones carried 54% of the shortfall.</li>
+        <li>Shipped a static results site in vanilla JavaScript and Vega-Lite, generated directly from the results files so every number traces to a source, covered by 94 automated pytest tests.</li>
+      </ul>`,
+    tags: ['Python', 'LightGBM', 'DuckDB', 'pandas', 'Vega-Lite', 'Time Series', 'pytest', 'Vercel'],
+    links: [
+      { label: 'GitHub', href: 'https://github.com/VikramVarkoor/Forecast-harness' },
+      { label: 'Live ↗', href: 'https://forecast-harness.vercel.app' },
+      { label: 'Electricity ↗', href: 'https://forecast-harness.vercel.app/elec.html' },
+    ],
+    lenses: ['software'],
+    swSummary: 'A day-ahead forecasting harness scores one global LightGBM model against simple baselines on 28 held-out days for both NYC ride-hail pickups and European electricity load, with a held-out guard and a leak test (shown to fail on planted leaks) keeping the scoring honest. A static Vega-Lite site, generated straight from the results files, publishes every number plus a plain Holds/Partly/Fails check against each claim.',
+    swDeepDive: `<p>The interesting decision here wasn't picking LightGBM, it was building the scaffolding that stops the results from being quietly wrong: a held-out guard that physically refuses to score the final weeks twice, and a leak test that's proven to actually catch a leak rather than just existing as a comment.</p>
+      <ul>
+        <li>The static results site (vanilla JavaScript, Vega-Lite, no framework) is generated entirely from the results files by Python scripts, so every chart and number on the page traces back to a specific source file rather than being hand-typed.</li>
+        <li>Ran an interval calibration check on the 10-90% prediction range: raw coverage came out at 75% against an 80% target, so the site marks that check "Partly" and tells visitors to treat the range as optimistic rather than quietly rounding the finding away.</li>
+        <li>Flagged the Netherlands, Austria, and Switzerland grid operators' own forecasts as unreliable benchmarks after finding their error sits above 4% every year, rather than scoring against them uncritically.</li>
+        <li>94 automated pytest tests cover the harness itself, the leak test, the site generators, and even the wording rules that keep claims like "not clearly different" from drifting into an overclaim.</li>
+      </ul>`,
+  },
+  {
     id: 'synapse',
     kicker: 'Senior Design · FPGA / Applied AI',
     title: 'Synapse.PL / HEAD System',
@@ -381,7 +410,7 @@ export const projects: Project[] = [
 
 export const projectMap: Record<string, Project> = Object.fromEntries(projects.map(p => [p.id, p]))
 
-export const SPOTLIGHT_IDS = ['synapse', 'deriv', 'lumen', 'churn']
+export const SPOTLIGHT_IDS = ['forecast', 'synapse', 'deriv', 'lumen', 'churn']
 
 export const ARCHIVE_GROUPS: { label: string; ids: string[] }[] = [
   { label: 'AI & Full-Stack', ids: ['paperchat', 'pitch', 'audit'] },
@@ -390,9 +419,10 @@ export const ARCHIVE_GROUPS: { label: string; ids: string[] }[] = [
 ]
 
 export const HARDWARE_LENS_IDS = ['synapse', 'powerquality', 'smartbin', 'syncrow']
-export const SOFTWARE_LENS_IDS = ['synapse', 'deriv', 'lumen', 'paperchat', 'churn']
+export const SOFTWARE_LENS_IDS = ['forecast', 'synapse', 'deriv', 'lumen', 'paperchat', 'churn']
 
 export const CHANNEL_ICONS: Record<string, string> = {
+  forecast: '<path d="M3 16l4-6 4 4 4-8 3 5" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 11l3 4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2.5 2.5"/>',
   synapse: '<rect x="7" y="7" width="10" height="10" rx="1"/><path d="M7 10H3M7 14H3M17 10h4M17 14h4M10 7V3M14 7V3M10 21v-4M14 21v-4"/>',
   deriv: '<polyline points="3,17 9,11 13,15 21,5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="15,5 21,5 21,11" stroke-linecap="round" stroke-linejoin="round"/>',
   lumen: '<circle cx="12" cy="4.5" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M12 6.5L6.3 16.4M12 6.5l5.7 9.9M7.5 18h9"/>',
@@ -404,7 +434,7 @@ export const skillsData = [
   { cat: 'Full-Stack', items: 'Next.js · TypeScript · React · Supabase · FastAPI · REST / SSE' },
   { cat: 'Cloud / DevOps', items: 'Vercel · Render · Azure (App Service, Static Web Apps) · GitHub Actions CI/CD' },
   { cat: 'Hardware', items: 'FPGA (Vitis HLS, Vivado, Zynq-7020) · Arduino · PCB Design · I2C / SPI / UART' },
-  { cat: 'Data', items: 'PySpark · pandas · SQL (window functions) · Tableau · NumPy / FFT' },
+  { cat: 'Data', items: 'PySpark · pandas · SQL (window functions) · Tableau · NumPy / FFT · Forecasting · Backtesting · LightGBM · DuckDB · Time Series' },
   { cat: 'IoT', items: 'MQTT · ZigBee · Tuya Platform · Device Validation' },
 ]
 
@@ -414,7 +444,7 @@ export const educationRows: { status: string; statusClass: string; venue: string
     statusClass: 'rev',
     venue: 'Heriot-Watt Univ. Dubai',
     title: 'MSc Artificial Intelligence',
-    note: 'starting Sep 2026',
+    note: 'started Sep 2026',
     badge: '🎓 Duffin Family Future Shapers Scholarship',
     badgeHref: 'https://www.hw.ac.uk/dubai/study/fees-and-funding/scholarships-and-discounts/the-duffin-family-future-shapers-scholarship',
   },

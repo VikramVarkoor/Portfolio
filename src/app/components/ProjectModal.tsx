@@ -40,7 +40,7 @@ export default function ProjectModal({ projectId, onClose }: { projectId: string
         </div>
         {p.links.length > 0 && (
           <div className="linkrow">
-            {p.links.map((l, i) => <a key={i} href={l.href}>{l.label}</a>)}
+            {p.links.map((l, i) => <a key={i} href={l.href} target="_blank" rel="noopener noreferrer">{l.label}</a>)}
           </div>
         )}
       </div>

@@ -40,8 +40,8 @@ export const projects: Project[] = [
     tags: ['Python', 'LightGBM', 'DuckDB', 'pandas', 'Vega-Lite', 'Time Series', 'pytest', 'Vercel'],
     links: [
       { label: 'GitHub', href: 'https://github.com/VikramVarkoor/Forecast-harness' },
-      { label: 'Live ↗', href: 'https://forecast-harness.vercel.app' },
-      { label: 'Electricity ↗', href: 'https://forecast-harness.vercel.app/elec.html' },
+      { label: 'Taxi Demo ↗', href: 'https://forecast-harness.vercel.app' },
+      { label: 'Electricity Demo ↗', href: 'https://forecast-harness.vercel.app/elec.html' },
     ],
     lenses: ['software'],
     swSummary: 'A day-ahead forecasting harness scores one global LightGBM model against simple baselines on 28 held-out days for both NYC ride-hail pickups and European electricity load, with a held-out guard and a leak test (shown to fail on planted leaks) keeping the scoring honest. A static Vega-Lite site, generated straight from the results files, publishes every number plus a plain Holds/Partly/Fails check against each claim.',

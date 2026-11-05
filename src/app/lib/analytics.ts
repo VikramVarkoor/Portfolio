@@ -15,3 +15,11 @@ export function trackCvDownload(source: 'home' | 'palette') {
 export function trackModeSwitch(mode: 'hardware' | 'software' | 'home') {
   track('mode_switched', { mode })
 }
+
+export function trackChatOpened() {
+  track('chat_opened', {})
+}
+
+export function trackChatMessage() {
+  track('chat_message_sent', {})
+}

@@ -3,6 +3,7 @@ import './globals.css'
 import { Analytics } from '@vercel/analytics/react'
 import WipeProvider from './components/WipeProvider'
 import CommandPalette from './components/CommandPalette'
+import ChatWidget from './components/ChatWidget'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://vikram-varkoor.vercel.app'),
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <WipeProvider>
           {children}
           <CommandPalette />
+          <ChatWidget />
         </WipeProvider>
         <Analytics />
       </body>

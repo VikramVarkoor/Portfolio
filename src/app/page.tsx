@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import HeroWave from './components/HeroWave'
+import GithubStats from './components/GithubStats'
 import TypewriterName from './components/TypewriterName'
 import ProjectModal from './components/ProjectModal'
 import Reveal from './components/Reveal'
@@ -19,9 +20,22 @@ import {
 
 const LAST_UPDATED = 'November 2026'
 
+// Semester 1 start date, used only to compute a live "wk N" label below so
+// the status line stays correct without a manual edit every week. Pure
+// arithmetic off a date he actually stated, nothing inferred or guessed.
+const MSC_START = '2026-09-01T00:00:00Z'
+
 export default function Home() {
   const { wipeNavigate } = useWipe()
   const [openId, setOpenId] = useState<string | null>(null)
+  const [mscLabel, setMscLabel] = useState('started Sept 2026')
+
+  useEffect(() => {
+    const start = new Date(MSC_START).getTime()
+    const now = Date.now()
+    const weeks = Math.floor((now - start) / (7 * 24 * 60 * 60 * 1000)) + 1
+    if (weeks >= 1) setMscLabel(`wk ${weeks}`)
+  }, [])
 
   useEffect(() => {
     function checkPendingProject() {
@@ -73,7 +87,7 @@ export default function Home() {
           FPGA-accelerated systems, applied AI, and forecasting pipelines. Two IEEE papers. Currently shipping across embedded hardware, machine learning, and data science.
         </div>
         <div className="status-line">
-          <span className="status-dot" /> Currently: MSc AI @ Heriot-Watt Dubai, started Sept 2026 · Open to full-time roles
+          <span className="status-dot" /> Currently: MSc AI @ Heriot-Watt Dubai, {mscLabel} · Open to full-time roles
         </div>
       </section>
 
@@ -83,6 +97,7 @@ export default function Home() {
           <a href="#sec-projects">Projects</a>
           <a href="#sec-archive">Archive</a>
           <a href="#sec-skills">Skills</a>
+          <a href="#sec-activity">Activity</a>
           <a href="#sec-education">Education</a>
           <a href="#sec-publications">Publications</a>
         </div>
@@ -159,6 +174,12 @@ export default function Home() {
             </div>
           ))}
         </div>
+        </Reveal>
+
+        <Reveal>
+        <div className="kicker" id="sec-activity">Live</div>
+        <h2 style={{ marginBottom: 24 }}>Activity</h2>
+        <GithubStats />
         </Reveal>
 
         <Reveal>

@@ -1,0 +1,405 @@
+@import "tailwindcss";
+
+/* ---------- Design tokens: Dark Studio (default) ---------- */
+:root {
+  --canvas: #07080b;
+  --surface: #0e1016;
+  --surface2: #141720;
+  --line: rgba(255, 255, 255, 0.085);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --ink: #f5f3ee;
+  --muted: rgba(245, 243, 238, 0.64);
+  --faint: rgba(245, 243, 238, 0.4);
+  --grid: rgba(255, 255, 255, 0.03);
+  --cyan: #38bdf8;
+  --cyan-soft: rgba(56, 189, 248, 0.1);
+  --cyan-line: rgba(56, 189, 248, 0.42);
+  --gold: #e5c17b;
+  --gold-soft: rgba(229, 193, 123, 0.1);
+  --gold-line: rgba(229, 193, 123, 0.44);
+  --ok: #4ade80;
+  --bad: #f87171;
+  --bad-soft: rgba(248, 113, 113, 0.12);
+  --glass: rgba(14, 16, 22, 0.78);
+  --on-accent: #07080b;
+  /* illustration palette */
+  --ill-dark: #0b0d12;
+  --ill-mid: #171a23;
+  --ill-hi: #222632;
+  --gold-deep: #8a6a2c;
+  --gold-hi: #f6dfa6;
+  color-scheme: dark;
+}
+
+/* ---------- Daylight Blueprint ---------- */
+html.daylight {
+  --canvas: #f4f2ec;
+  --surface: #fbfaf6;
+  --surface2: #ece9df;
+  --line: rgba(20, 21, 24, 0.14);
+  --line-strong: rgba(20, 21, 24, 0.28);
+  --ink: #141518;
+  --muted: rgba(20, 21, 24, 0.7);
+  --faint: rgba(20, 21, 24, 0.46);
+  --grid: rgba(20, 21, 24, 0.055);
+  --cyan: #0047ff;
+  --cyan-soft: rgba(0, 71, 255, 0.07);
+  --cyan-line: rgba(0, 71, 255, 0.45);
+  --gold: #ff4d00;
+  --gold-soft: rgba(255, 77, 0, 0.07);
+  --gold-line: rgba(255, 77, 0, 0.45);
+  --ok: #0a8f4a;
+  --bad: #c81e1e;
+  --bad-soft: rgba(200, 30, 30, 0.09);
+  --glass: rgba(251, 250, 246, 0.86);
+  --on-accent: #ffffff;
+  --ill-dark: #d9d5c8;
+  --ill-mid: #e6e2d6;
+  --ill-hi: #f2efe6;
+  --gold-deep: #c23a00;
+  --gold-hi: #ff8a55;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface2: var(--surface2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-cyan: var(--cyan);
+  --color-cyan-soft: var(--cyan-soft);
+  --color-cyan-line: var(--cyan-line);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-line: var(--gold-line);
+  --color-ok: var(--ok);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-glass: var(--glass);
+  --color-on-accent: var(--on-accent);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jb), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--canvas);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 36px 36px;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  overflow: hidden;
+}
+
+::selection {
+  background: var(--cyan-line);
+}
+
+/* thin scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+/* ---------- Shared component classes ---------- */
+@layer components {
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+  .label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    padding: 3px 7px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .btn {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    color: var(--ink);
+    white-space: nowrap;
+    transition:
+      background 0.15s,
+      border-color 0.15s,
+      color 0.15s;
+  }
+  .btn:hover {
+    border-color: var(--ink);
+  }
+  .btn-cyan {
+    border-color: var(--cyan-line);
+    color: var(--cyan);
+    background: var(--cyan-soft);
+  }
+  .btn-cyan:hover {
+    border-color: var(--cyan);
+  }
+  .btn-gold {
+    border-color: var(--gold-line);
+    color: var(--gold);
+    background: var(--gold-soft);
+  }
+  .btn-gold:hover {
+    border-color: var(--gold);
+  }
+  .helper {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    color: var(--faint);
+    text-transform: uppercase;
+  }
+}
+
+/* ---------- Motion ---------- */
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -260;
+  }
+}
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.flow {
+  stroke-dasharray: 16 244;
+  animation: dash-flow 3.2s linear infinite;
+}
+.float {
+  animation: float-y 6s ease-in-out infinite;
+}
+.blink {
+  animation: blink 1.1s steps(1) infinite;
+}
+.pulse {
+  animation: pulse-soft 2.2s ease-in-out infinite;
+}
+.rise {
+  animation: rise 0.45s ease-out both;
+}
+
+/* Signal pulse along schematic connectors, shown while the card is hovered. */
+@keyframes sig-flow {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+.sig {
+  stroke-dasharray: 5 9;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.group:hover .sig,
+.group:focus-within .sig {
+  opacity: 1;
+  animation: sig-flow 0.9s linear infinite;
+}
+
+/* Lab Hub equipment motion */
+@keyframes eq {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.eq {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: eq 1.3s ease-in-out infinite;
+}
+@keyframes scope-scroll {
+  to {
+    transform: translateX(-20px);
+  }
+}
+.scope-scroll {
+  animation: scope-scroll 1.4s linear infinite;
+}
+@keyframes type-line {
+  0% {
+    transform: scaleX(0);
+  }
+  35%,
+  100% {
+    transform: scaleX(1);
+  }
+}
+.type-line {
+  transform-box: fill-box;
+  transform-origin: 0 50%;
+  animation: type-line 5s steps(12) infinite;
+}
+.crt-glow {
+  filter: drop-shadow(0 0 3px var(--ok));
+}
+
+/* Ask AI thinking dots */
+@keyframes dot-bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+.dot {
+  animation: dot-bounce 1s ease-in-out infinite;
+}
+
+.station {
+  cursor: pointer;
+  transition: filter 0.2s;
+  outline: none;
+}
+.station:hover,
+.station:focus-visible {
+  filter: brightness(1.35) drop-shadow(0 0 14px var(--cyan-line));
+}
+.station.gold:hover,
+.station.gold:focus-visible {
+  filter: brightness(1.3) drop-shadow(0 0 14px var(--gold-line));
+}
+
+/* range sliders */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 3px;
+  background: var(--line-strong);
+  border-radius: 2px;
+  accent-color: var(--cyan);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--cyan);
+  border: 2px solid var(--canvas);
+  box-shadow: 0 0 0 1px var(--cyan);
+  cursor: grab;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--cyan);
+  border: 2px solid var(--canvas);
+  cursor: grab;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow,
+  .float,
+  .blink,
+  .pulse,
+  .rise,
+  .eq,
+  .scope-scroll,
+  .type-line,
+  .dot,
+  .group:hover .sig {
+    animation: none;
+  }
+}
+
+/* Print only the Classic CV sheet */
+@media print {
+  body {
+    overflow: visible;
+    background: #fff;
+  }
+  body * {
+    visibility: hidden;
+  }
+  #cv-sheet,
+  #cv-sheet * {
+    visibility: visible;
+  }
+  #cv-sheet {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+    box-shadow: none;
+  }
+}
